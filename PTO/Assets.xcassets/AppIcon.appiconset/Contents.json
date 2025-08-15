@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "Poop Rich.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -23,6 +24,7 @@
           "value" : "tinted"
         }
       ],
+      "filename" : "tinted_version.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

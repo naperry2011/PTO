@@ -17,25 +17,31 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             TimerView(sessionManager: sessionManager)
                 .tabItem {
-                    Label("Operations", systemImage: selectedTab == 0 ? "timer.circle.fill" : "timer.circle")
+                    Label("Operations", systemImage: "timer")
                 }
                 .tag(0)
                 .badge(sessionManager.currentSession != nil ? "Active" : nil)
+                .accessibilityLabel("Operations tab")
+                .accessibilityHint("Timer functionality for tracking bathroom breaks")
             
             PoopDiaryView(sessionManager: sessionManager)
                 .tabItem {
-                    Label("Dashboard", systemImage: selectedTab == 1 ? "chart.bar.doc.horizontal.fill" : "chart.bar.doc.horizontal")
+                    Label("Dashboard", systemImage: "chart.bar.doc.horizontal")
                 }
                 .tag(1)
                 .if(sessionManager.sessions.count > 0) { view in
                     view.badge(sessionManager.sessions.count)
                 }
+                .accessibilityLabel("Dashboard tab")
+                .accessibilityHint("View statistics and session history")
             
             SettingsView()
                 .tabItem {
-                    Label("Control", systemImage: selectedTab == 2 ? "gearshape.fill" : "gearshape")
+                    Label("Control", systemImage: "gearshape")
                 }
                 .tag(2)
+                .accessibilityLabel("Control tab")
+                .accessibilityHint("App settings and configuration")
         }
         .environmentObject(settings)
         .environmentObject(sessionManager)
@@ -56,44 +62,27 @@ struct ContentView: View {
     private func configureTabBarAppearance() {
         let appearance = UITabBarAppearance()
         
-        // Configure background with modern material
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-        appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        // Use default transparent background for better HIG compliance
+        appearance.configureWithDefaultBackground()
         
-        // Configure item appearance
+        // Configure item appearance with subtle corporate theming
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .foregroundColor: UIColor.secondaryLabel,
-            .font: UIFont.systemFont(ofSize: 10, weight: .medium)
+            .foregroundColor: UIColor.secondaryLabel
         ]
         
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-            .foregroundColor: UIColor(AppColors.corporate),
-            .font: UIFont.systemFont(ofSize: 10, weight: .bold)
+            .foregroundColor: UIColor(AppColors.corporate)
         ]
         
         appearance.stackedLayoutAppearance.normal.iconColor = UIColor.secondaryLabel
         appearance.stackedLayoutAppearance.selected.iconColor = UIColor(AppColors.corporate)
         
-        // Apply appearance
+        // Apply appearance to all tab bar configurations
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
         
-        // Configure selection indicator
-        UITabBar.appearance().selectionIndicatorImage = createSelectionIndicator()
-    }
-    
-    private func createSelectionIndicator() -> UIImage? {
-        let size = CGSize(width: 60, height: 2)
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        
-        UIColor(AppColors.corporate).setFill()
-        UIRectFill(CGRect(origin: .zero, size: size))
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image
+        // Remove custom selection indicator for standard iOS behavior
+        UITabBar.appearance().selectionIndicatorImage = nil
     }
 }
 

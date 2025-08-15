@@ -26,179 +26,132 @@ struct TimerView: View {
                 
                 ScrollView {
                     VStack(spacing: DesignTokens.spacing.xl) {
-                        // Corporate Header Section
+                        // Simplified Header Section
                         VStack(spacing: DesignTokens.spacing.md) {
-                            VStack(spacing: DesignTokens.spacing.sm) {
-                                Text("💼 CORPORATE TIME THEFT DIVISION 🚽")
-                                    .font(DesignTokens.typography.heroTitle)
-                                    .foregroundStyle(AppColors.corporate)
-                                    .multilineTextAlignment(.center)
-                                    .accessibilityLabel("Corporate Time Theft Division")
-                                
-                                Text("Department of Bathroom-Based Revenue Generation")
-                                    .corporateHeaderStyle()
-                                    .accessibilityLabel("Department subtitle")
-                            }
+                            Text("💼 TIME THEFT OPERATIONS 🚽")
+                                .font(DesignTokens.typography.title1)
+                                .foregroundStyle(AppColors.corporate)
+                                .multilineTextAlignment(.center)
+                                .accessibilityLabel("Time Theft Operations")
                             
-                            VStack(spacing: DesignTokens.spacing.xs) {
-                                Text("Current Wage Theft Rate")
+                            HStack(spacing: DesignTokens.spacing.sm) {
+                                Text("Earning Rate:")
                                     .corporateHeaderStyle()
-                                    .accessibilityLabel("Current hourly wage rate label")
+                                    .foregroundStyle(AppColors.secondaryText)
                                 
                                 Text(settings.formattedWage)
-                                    .font(DesignTokens.typography.title1)
+                                    .font(DesignTokens.typography.headline)
                                     .foregroundStyle(AppColors.rebellion)
-                                    .accessibilityLabel("Hourly wage: \(settings.formattedWage)")
+                                    .fontWeight(.bold)
                             }
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel("Earning rate: \(settings.formattedWage) per hour")
                         }
-                        .padding(.top, DesignTokens.spacing.lg)
+                        .padding(.top, DesignTokens.spacing.md)
                         
-                        // Modern Timer Circle with enhanced visuals
-                        ZStack {
-                            // Background circle with subtle shadow
-                            Circle()
-                                .stroke(
-                                    AppColors.timerBackground,
-                                    style: StrokeStyle(lineWidth: 16, lineCap: .round)
-                                )
-                                .frame(width: 280, height: 280)
-                                .dynamicCardShadow(colorScheme: colorScheme)
-                                .accessibilityHidden(true)
+                        // Streamlined Timer Display
+                        VStack(spacing: DesignTokens.spacing.lg) {
+                            // Timer Status
+                            Text(isRunning ? "🚨 ACTIVE OPERATION" : "⏸️ READY TO DEPLOY")
+                                .font(DesignTokens.typography.title3)
+                                .foregroundStyle(isRunning ? AppColors.warning : AppColors.secondaryText)
+                                .accessibilityLabel(isRunning ? "Timer is running" : "Timer is stopped")
                             
-                            // Progress circle with smooth animation
-                            Circle()
-                                .trim(from: 0, to: circleProgress)
-                                .stroke(
-                                    LinearGradient(
-                                        colors: isRunning 
-                                            ? AppColors.timerProgress
-                                            : [AppColors.timerInactive],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    style: StrokeStyle(lineWidth: 16, lineCap: .round)
-                                )
-                                .frame(width: 280, height: 280)
-                                .rotationEffect(.degrees(-90))
-                                .animation(.spring(response: 0.8, dampingFraction: 0.8), value: circleProgress)
-                                .accessibilityLabel("Timer progress: \(Int(circleProgress * 100)) percent complete")
-                            
-                            // Corporate Timer Display
-                            VStack(spacing: DesignTokens.spacing.lg) {
-                                VStack(spacing: DesignTokens.spacing.sm) {
-                                    Text(isRunning ? "TIME THEFT IN PROGRESS" : "OPERATION STANDBY")
-                                        .corporateHeaderStyle()
-                                        .foregroundStyle(isRunning ? AppColors.warning : AppColors.secondaryText)
-                                        .accessibilityLabel(isRunning ? "Timer is running" : "Timer is stopped")
-                                    
+                            // Main Timer Circle - Reduced Size
+                            ZStack {
+                                Circle()
+                                    .stroke(AppColors.timerBackground, lineWidth: 12)
+                                    .frame(width: 220, height: 220)
+                                
+                                Circle()
+                                    .trim(from: 0, to: circleProgress)
+                                    .stroke(
+                                        LinearGradient(
+                                            colors: isRunning ? [AppColors.rebellion, AppColors.accent] : [AppColors.timerInactive],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ),
+                                        style: StrokeStyle(lineWidth: 12, lineCap: .round)
+                                    )
+                                    .frame(width: 220, height: 220)
+                                    .rotationEffect(.degrees(-90))
+                                    .animation(.spring(response: 0.6, dampingFraction: 0.8), value: circleProgress)
+                                    .accessibilityLabel("Timer progress: \(Int(circleProgress * 100)) percent complete")
+                                
+                                // Timer Content
+                                VStack(spacing: DesignTokens.spacing.md) {
                                     Text(formatTime(elapsedTime))
-                                        .font(.system(size: 48, weight: .bold, design: .monospaced))
+                                        .font(.system(size: 42, weight: .bold, design: .monospaced))
                                         .foregroundStyle(AppColors.primaryText)
                                         .monospacedDigit()
                                         .accessibilityLabel("Elapsed time: \(formatTime(elapsedTime))")
-                                }
-                                
-                                VStack(spacing: DesignTokens.spacing.sm) {
-                                    Text("💰 STOLEN FROM THE MAN 💰")
-                                        .corporateHeaderStyle()
-                                        .foregroundStyle(AppColors.secondaryText)
-                                        .accessibilityLabel("Earnings tracker")
                                     
                                     Text(settings.formatEarnings(currentEarnings))
-                                        .font(.system(size: 28, weight: .black, design: .rounded))
+                                        .font(.system(size: 22, weight: .bold, design: .rounded))
                                         .foregroundStyle(AppColors.rebellion)
-                                        .scaleEffect(pulseAnimation ? 1.12 : 1.0)
+                                        .scaleEffect(pulseAnimation && isRunning ? 1.08 : 1.0)
                                         .animation(
-                                            .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+                                            isRunning ? .easeInOut(duration: 1.0).repeatForever(autoreverses: true) : .default,
                                             value: pulseAnimation
                                         )
                                         .accessibilityLabel("Current earnings: \(settings.formatEarnings(currentEarnings))")
-                                    
-                                    Text("Boss makes a dollar, you make a dime...")
-                                        .corporateCaptionStyle()
-                                        .italic()
-                                        .accessibilityHidden(true)
                                 }
                             }
+                            .dynamicCardShadow(colorScheme: colorScheme)
                         }
                         
-                        // Corporate Action Button
+                        // Simplified Action Button
                         Button(action: toggleTimer) {
                             HStack(spacing: DesignTokens.spacing.sm) {
-                                Image(systemName: isRunning ? "stop.circle.fill" : "play.circle.fill")
-                                    .font(DesignTokens.typography.title3)
+                                Image(systemName: isRunning ? "stop.fill" : "play.fill")
+                                    .font(.title2)
                                     .foregroundStyle(.white)
                                 
-                                Text(isRunning ? "CEASE TIME THEFT" : "INITIATE OPERATION")
+                                Text(isRunning ? "END SESSION" : "START SESSION")
                                     .font(DesignTokens.typography.headline)
                                     .foregroundStyle(.white)
-                                    .tracking(0.5)
-                                    .textCase(.uppercase)
+                                    .fontWeight(.semibold)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, DesignTokens.spacing.lg)
                             .background(
-                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.lg)
+                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.md)
                                     .fill(
-                                        LinearGradient(
-                                            colors: isRunning 
-                                                ? AppColors.gradientDanger
-                                                : AppColors.gradientRebellion,
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
+                                        isRunning 
+                                            ? LinearGradient(colors: [AppColors.error, AppColors.warning], startPoint: .leading, endPoint: .trailing)
+                                            : LinearGradient(colors: [AppColors.rebellion, AppColors.accent], startPoint: .leading, endPoint: .trailing)
                                     )
-                                    .dynamicElevatedShadow(colorScheme: colorScheme)
+                                    .dynamicCardShadow(colorScheme: colorScheme)
                             )
                         }
                         .accessibilityLabel(isRunning ? "Stop timer" : "Start timer")
                         .accessibilityHint(isRunning ? "Stops the current session and opens completion form" : "Starts tracking your bathroom break session")
-                        .padding(.horizontal, DesignTokens.spacing.md)
+                        .padding(.horizontal, DesignTokens.spacing.lg)
                         .scaleEffect(isRunning ? 0.98 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isRunning)
                         
-                        // Corporate Status Alert
+                        // Simplified Status Display
                         if isRunning {
-                            VStack(spacing: DesignTokens.spacing.md) {
-                                HStack(spacing: DesignTokens.spacing.sm) {
-                                    Image(systemName: "exclamationmark.triangle.fill")
-                                        .font(DesignTokens.typography.title3)
-                                        .foregroundStyle(AppColors.warning)
-                                    
-                                    Text("ACTIVE WAGE THEFT DETECTED")
-                                        .rebellionHeaderStyle()
-                                        .foregroundStyle(AppColors.primaryText)
-                                }
+                            VStack(spacing: DesignTokens.spacing.sm) {
+                                Text("💼 Boss makes a dollar, you make a dime...")
+                                    .corporateSubheadStyle()
+                                    .italic()
+                                    .multilineTextAlignment(.center)
                                 
-                                VStack(spacing: DesignTokens.spacing.sm) {
-                                    Text("🎯 OPERATION: BATHROOM BREAK")
-                                        .corporateBodyStyle()
-                                        .fontWeight(.semibold)
-                                        .foregroundStyle(AppColors.corporate)
-                                    
-                                    Text("Status: Successfully sticking it to the man")
-                                        .corporateSubheadStyle()
-                                        .multilineTextAlignment(.center)
-                                }
+                                Text("That's why you earn on company time! 🚽")
+                                    .corporateBodyStyle()
+                                    .foregroundStyle(AppColors.rebellion)
+                                    .fontWeight(.medium)
+                                    .multilineTextAlignment(.center)
                             }
-                            .sectionContainerStyle(colorScheme: colorScheme)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.lg)
-                                    .stroke(
-                                        LinearGradient(
-                                            colors: [AppColors.warning, AppColors.error],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        ),
-                                        lineWidth: 2
-                                    )
+                            .padding(DesignTokens.spacing.md)
+                            .background(
+                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.md)
+                                    .fill(AppColors.rebellion.opacity(0.1))
+                                    .stroke(AppColors.rebellion.opacity(0.3), lineWidth: 1)
                             )
-                            .transition(.asymmetric(
-                                insertion: .scale.combined(with: .opacity),
-                                removal: .scale.combined(with: .opacity)
-                            ))
+                            .transition(.scale.combined(with: .opacity))
                             .accessibilityLabel("Timer is currently running")
-                            .accessibilityValue("Operation in progress")
                         }
                         
                         Spacer(minLength: DesignTokens.spacing.xxl)

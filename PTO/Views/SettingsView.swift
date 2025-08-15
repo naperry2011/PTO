@@ -180,7 +180,7 @@ struct SettingsView: View {
                             FactRow(emoji: "📱", fact: "75% of people use phones in the bathroom")
                             FactRow(emoji: "⏰", fact: "Average bathroom break: 12-15 minutes")
                         }
-                        .accessibilityElement(combining: .children)
+                        .accessibilityElement(children: .combine)
                         .accessibilityLabel("Fun facts about bathroom habits")
                     }
                     .padding(.vertical, DesignTokens.spacing.sm)
@@ -211,7 +211,7 @@ struct FactRow: View {
             Text(fact)
                 .corporateCaptionStyle()
         }
-        .accessibilityElement(combining: .children)
+        .accessibilityElement(children: .combine)
         .accessibilityLabel(fact)
     }
 }
@@ -237,7 +237,7 @@ struct AboutView: View {
                             .corporateCaptionStyle()
                     }
                     .padding(.top, DesignTokens.spacing.lg)
-                    .accessibilityElement(combining: .children)
+                    .accessibilityElement(children: .combine)
                     .accessibilityLabel("Paid to Operate app, Version 1.0.0")
                     
                     VStack(spacing: DesignTokens.spacing.md) {
@@ -249,7 +249,7 @@ struct AboutView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, DesignTokens.spacing.md)
                     }
-                    .accessibilityElement(combining: .children)
+                    .accessibilityElement(children: .combine)
                     .accessibilityLabel("App description: Track your earnings during bathroom breaks at work")
                     
                     VStack(alignment: .leading, spacing: DesignTokens.spacing.lg) {
@@ -259,7 +259,7 @@ struct AboutView: View {
                         FeatureRow(icon: "chart.line.uptrend.xyaxis", title: "Statistics", description: "Track your bathroom economy")
                     }
                     .sectionContainerStyle(colorScheme: colorScheme)
-                    .accessibilityElement(combining: .children)
+                    .accessibilityElement(children: .combine)
                     .accessibilityLabel("App features list")
                     
                     VStack(spacing: DesignTokens.spacing.sm) {
@@ -276,7 +276,7 @@ struct AboutView: View {
                         RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.lg)
                             .stroke(AppColors.warning, lineWidth: 2)
                     )
-                    .accessibilityElement(combining: .children)
+                    .accessibilityElement(children: .combine)
                     .accessibilityLabel("App motto: Boss makes a dollar, I make a dime, that's why I poop on company time")
                     
                     Spacer(minLength: DesignTokens.spacing.xl)
@@ -319,7 +319,7 @@ struct FeatureRow: View {
             
             Spacer()
         }
-        .accessibilityElement(combining: .children)
+        .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title): \(description)")
     }
 }
