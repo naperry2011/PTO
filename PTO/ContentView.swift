@@ -8,14 +8,39 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var settings = UserSettings()
+    @State private var selectedTab = 0
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView(selection: $selectedTab) {
+            TimerView()
+                .tabItem {
+                    Label("Timer", systemImage: "timer")
+                }
+                .tag(0)
+            
+            PoopDiaryView()
+                .tabItem {
+                    Label("Diary", systemImage: "book.fill")
+                }
+                .tag(1)
+            
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
+                .tag(2)
         }
-        .padding()
+        .environmentObject(settings)
+        .accentColor(.green)
+        .onAppear {
+            let appearance = UITabBarAppearance()
+            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.9)
+            
+            UITabBar.appearance().standardAppearance = appearance
+            UITabBar.appearance().scrollEdgeAppearance = appearance
+        }
     }
 }
 
