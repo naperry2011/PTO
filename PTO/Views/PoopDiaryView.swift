@@ -3,14 +3,13 @@ import SwiftUI
 struct PoopDiaryView: View {
     @StateObject private var sessionManager = SessionManager()
     @EnvironmentObject var settings: UserSettings
+    @Environment(\.colorScheme) var colorScheme
     @State private var selectedSession: PoopSession?
     
     var body: some View {
         NavigationView {
             ZStack {
-                LinearGradient(gradient: Gradient(colors: [Color.brown.opacity(0.05), Color.green.opacity(0.05)]),
-                              startPoint: .topLeading,
-                              endPoint: .bottomTrailing)
+                AppColors.primaryBackground
                     .ignoresSafeArea()
                 
                 ScrollView {
@@ -85,31 +84,35 @@ struct StatCard: View {
     let value: String
     let icon: String
     let color: Color
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundColor(color)
+                .foregroundStyle(color)
             
             Text(value)
                 .font(.headline)
                 .fontWeight(.bold)
+                .foregroundStyle(AppColors.primaryText)
             
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(AppColors.secondaryText)
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.gray.opacity(0.1))
+        .background(AppColors.secondaryBackground)
         .cornerRadius(15)
+        .dynamicCardShadow(colorScheme: colorScheme)
     }
 }
 
 struct SessionCard: View {
     let session: PoopSession
     let settings: UserSettings
+    @Environment(\.colorScheme) var colorScheme
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -130,7 +133,7 @@ struct SessionCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(dateFormatter.string(from: session.startTime))
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(AppColors.secondaryText)
                 
                 HStack(spacing: 12) {
                     Label(session.formattedDuration, systemImage: "clock")
@@ -138,13 +141,13 @@ struct SessionCard: View {
                     
                     Label(session.formattedEarnings, systemImage: "dollarsign.circle")
                         .font(.caption)
-                        .foregroundColor(.green)
+                        .foregroundStyle(AppColors.accent)
                 }
                 
                 if !session.notes.isEmpty {
                     Text(session.notes)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(AppColors.secondaryText)
                         .lineLimit(2)
                 }
             }
@@ -153,12 +156,12 @@ struct SessionCard: View {
             
             Image(systemName: "chevron.right")
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(AppColors.secondaryText)
         }
         .padding()
-        .background(Color.white)
+        .background(AppColors.cardBackground)
         .cornerRadius(15)
-        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        .dynamicCardShadow(colorScheme: colorScheme)
     }
 }
 
@@ -171,10 +174,11 @@ struct EmptyDiaryView: View {
             Text("No Sessions Yet")
                 .font(.title2)
                 .fontWeight(.bold)
+                .foregroundStyle(AppColors.primaryText)
             
             Text("Start your first paid bathroom break!")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(AppColors.secondaryText)
                 .multilineTextAlignment(.center)
         }
         .padding()
@@ -185,6 +189,7 @@ struct SessionDetailView: View {
     let session: PoopSession
     let settings: UserSettings
     @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) var colorScheme
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -207,7 +212,7 @@ struct SessionDetailView: View {
                         
                         Text(dateFormatter.string(from: session.startTime))
                             .font(.headline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(AppColors.secondaryText)
                     }
                     
                     HStack(spacing: 20) {
@@ -244,9 +249,10 @@ struct SessionDetailView: View {
                                 
                                 Text(session.notes)
                                     .font(.body)
+                                    .foregroundStyle(AppColors.primaryText)
                                     .padding()
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(Color.gray.opacity(0.1))
+                                    .background(AppColors.secondaryBackground)
                                     .cornerRadius(10)
                             }
                         }
@@ -280,15 +286,16 @@ struct DetailCard: View {
         VStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.title)
-                .foregroundColor(color)
+                .foregroundStyle(color)
             
             Text(value)
                 .font(.title2)
                 .fontWeight(.bold)
+                .foregroundStyle(AppColors.primaryText)
             
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(AppColors.secondaryText)
         }
         .frame(maxWidth: .infinity)
         .padding()
@@ -310,16 +317,29 @@ struct DetailRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(label)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(AppColors.secondaryText)
                 Text(value)
                     .font(.body)
                     .fontWeight(.medium)
+                    .foregroundStyle(AppColors.primaryText)
             }
             
             Spacer()
         }
         .padding()
-        .background(Color.gray.opacity(0.05))
+        .background(AppColors.secondaryBackground)
         .cornerRadius(10)
     }
+}
+
+#Preview("Light Mode") {
+    PoopDiaryView()
+        .environmentObject(UserSettings())
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark Mode") {
+    PoopDiaryView()
+        .environmentObject(UserSettings())
+        .preferredColorScheme(.dark)
 }

@@ -12,7 +12,7 @@ struct SettingsView: View {
                     HStack {
                         Image(systemName: "person.circle.fill")
                             .font(.title2)
-                            .foregroundColor(.blue)
+                            .foregroundStyle(AppColors.interactive)
                         
                         TextField("Your Name", text: $settings.userName)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -41,7 +41,7 @@ struct SettingsView: View {
                             }
                         
                         Text(settings.currencySymbol + "/hr")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(AppColors.secondaryText)
                     }
                     
                     Picker("Currency", selection: $settings.currencySymbol) {
@@ -58,13 +58,29 @@ struct SettingsView: View {
                 }
                 
                 Section {
+                    // Appearance Mode Picker
+                    Picker("Appearance", selection: $settings.appearanceMode) {
+                        ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                            HStack {
+                                Image(systemName: mode.icon)
+                                    .foregroundStyle(AppColors.secondaryText)
+                                Text(mode.displayName)
+                            }
+                            .tag(mode)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .tint(AppColors.interactive)
+                    
                     Toggle(isOn: $settings.enableHaptics) {
                         Label("Haptic Feedback", systemImage: "iphone.radiowaves.left.and.right")
                     }
+                    .tint(AppColors.accent)
                     
                     Toggle(isOn: $settings.enableNotifications) {
                         Label("Notifications", systemImage: "bell.badge")
                     }
+                    .tint(AppColors.accent)
                 } header: {
                     Text("Preferences")
                 }
@@ -74,7 +90,7 @@ struct SettingsView: View {
                         Label("Daily Earnings Goal", systemImage: "target")
                         Spacer()
                         Text("Coming Soon")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(AppColors.secondaryText)
                             .font(.caption)
                     }
                     
@@ -82,7 +98,7 @@ struct SettingsView: View {
                         Label("Export Data", systemImage: "square.and.arrow.up")
                         Spacer()
                         Text("Coming Soon")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(AppColors.secondaryText)
                             .font(.caption)
                     }
                     
@@ -90,7 +106,7 @@ struct SettingsView: View {
                         Label("Achievements", systemImage: "trophy.fill")
                         Spacer()
                         Text("Coming Soon")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(AppColors.secondaryText)
                             .font(.caption)
                     }
                 } header: {
@@ -104,7 +120,7 @@ struct SettingsView: View {
                             Spacer()
                             Image(systemName: "chevron.right")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(AppColors.secondaryText)
                         }
                     }
                     
@@ -112,7 +128,7 @@ struct SettingsView: View {
                         Label("Version", systemImage: "gear")
                         Spacer()
                         Text("1.0.0")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(AppColors.secondaryText)
                     }
                 }
                 
@@ -149,7 +165,7 @@ struct FactRow: View {
                 .font(.title3)
             Text(fact)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(AppColors.secondaryText)
         }
     }
 }
@@ -171,7 +187,7 @@ struct AboutView: View {
                         
                         Text("Version 1.0.0")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(AppColors.secondaryText)
                     }
                     .padding(.top, 20)
                     
@@ -182,7 +198,7 @@ struct AboutView: View {
                         Text("Track your earnings during bathroom breaks at work. Because if you're good at something, never do it for free!")
                             .font(.body)
                             .multilineTextAlignment(.center)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(AppColors.secondaryText)
                             .padding(.horizontal)
                     }
                     
@@ -204,7 +220,7 @@ struct AboutView: View {
                             .fontWeight(.bold)
                     }
                     .padding()
-                    .background(Color.yellow.opacity(0.1))
+                    .background(AppColors.warning.opacity(0.1))
                     .cornerRadius(15)
                     .padding(.horizontal)
                     
@@ -233,7 +249,7 @@ struct FeatureRow: View {
         HStack(alignment: .top, spacing: 16) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundColor(.blue)
+                .foregroundStyle(AppColors.interactive)
                 .frame(width: 30)
             
             VStack(alignment: .leading, spacing: 4) {
@@ -242,10 +258,22 @@ struct FeatureRow: View {
                     .fontWeight(.semibold)
                 Text(description)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(AppColors.secondaryText)
             }
             
             Spacer()
         }
     }
+}
+
+#Preview("Light Mode") {
+    SettingsView()
+        .environmentObject(UserSettings())
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark Mode") {
+    SettingsView()
+        .environmentObject(UserSettings())
+        .preferredColorScheme(.dark)
 }
