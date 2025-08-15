@@ -96,7 +96,7 @@ struct StatsHeaderView: View {
                     color: AppColors.warning
                 )
             }
-            .accessibilityElement(combining: .children)
+            .accessibilityElement(children: .combine)
             .accessibilityLabel("Performance statistics")
         }
     }
@@ -126,7 +126,7 @@ struct StatCard: View {
         }
         .frame(maxWidth: .infinity)
         .corporateCardStyle(colorScheme: colorScheme)
-        .accessibilityElement(combining: .children)
+        .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title): \(value)")
     }
 }
@@ -185,7 +185,7 @@ struct SessionCard: View {
                 .accessibilityHidden(true)
         }
         .corporateCardStyle(colorScheme: colorScheme)
-        .accessibilityElement(combining: .children)
+        .accessibilityElement(children: .combine)
         .accessibilityHint("Session from \(dateFormatter.string(from: session.startTime))")
     }
 }
@@ -214,7 +214,7 @@ struct EmptyDiaryView: View {
                     .foregroundStyle(AppColors.error)
                     .multilineTextAlignment(.center)
             }
-            .accessibilityElement(combining: .children)
+            .accessibilityElement(children: .combine)
             .accessibilityLabel("No time theft operations detected")
             
             VStack(spacing: DesignTokens.spacing.sm) {
@@ -227,7 +227,7 @@ struct EmptyDiaryView: View {
                     .multilineTextAlignment(.center)
                     .italic()
             }
-            .accessibilityElement(combining: .children)
+            .accessibilityElement(children: .combine)
             .accessibilityLabel("Initiate your first corporate rebellion! The man won't pay himself while you poop...")
         }
         .sectionContainerStyle(colorScheme: colorScheme)
@@ -357,7 +357,7 @@ struct DetailCard: View {
             RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.md)
                 .fill(color.opacity(0.1))
         )
-        .accessibilityElement(combining: .children)
+        .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title): \(value)")
     }
 }
@@ -385,19 +385,19 @@ struct DetailRow: View {
             Spacer()
         }
         .corporateCardStyle(colorScheme: colorScheme)
-        .accessibilityElement(combining: .children)
+        .accessibilityElement(children: .combine)
         .accessibilityLabel("\(label): \(value)")
     }
 }
 
 #Preview("Light Mode") {
-    PoopDiaryView()
+    PoopDiaryView(sessionManager: SessionManager())
         .environmentObject(UserSettings())
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark Mode") {
-    PoopDiaryView()
+    PoopDiaryView(sessionManager: SessionManager())
         .environmentObject(UserSettings())
         .preferredColorScheme(.dark)
 }

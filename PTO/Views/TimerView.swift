@@ -503,7 +503,7 @@ struct StatsSummaryCard: View {
                 .fill(color.opacity(0.1))
                 .stroke(color.opacity(0.2), lineWidth: 1)
         )
-        .accessibilityElement(combining: .children)
+        .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title): \(value)")
     }
 }
@@ -583,13 +583,13 @@ struct MoodSelectionCard: View {
 }
 
 #Preview("Light Mode") {
-    TimerView()
+    TimerView(sessionManager: SessionManager())
         .environmentObject(UserSettings())
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark Mode") {
-    TimerView()
+    TimerView(sessionManager: SessionManager())
         .environmentObject(UserSettings())
         .preferredColorScheme(.dark)
 }

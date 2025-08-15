@@ -218,6 +218,16 @@ extension View {
             y: colorScheme == .dark ? 6 : 4
         )
     }
+    
+    /// Conditional view modifier
+    @ViewBuilder
+    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
 }
 
 // MARK: - Corporate Design System

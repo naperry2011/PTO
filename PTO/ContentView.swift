@@ -27,7 +27,9 @@ struct ContentView: View {
                     Label("Dashboard", systemImage: selectedTab == 1 ? "chart.bar.doc.horizontal.fill" : "chart.bar.doc.horizontal")
                 }
                 .tag(1)
-                .badge(sessionManager.sessions.count > 0 ? sessionManager.sessions.count : nil)
+                .if(sessionManager.sessions.count > 0) { view in
+                    view.badge(sessionManager.sessions.count)
+                }
             
             SettingsView()
                 .tabItem {
