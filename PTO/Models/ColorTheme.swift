@@ -33,55 +33,61 @@ enum AppearanceMode: String, CaseIterable, Codable {
     }
 }
 
-/// Semantic color system for the PTO app that adapts to light and dark modes
+/// Anti-Corporate Rebellion color system - Corporate aesthetics with subversive content
 struct AppColors {
     
-    // MARK: - Primary Colors
+    // MARK: - Corporate Rebellion Colors
     
-    /// Primary background color for main content areas
+    /// Primary background - Corporate sterile white/dark
     static let primaryBackground = Color("PrimaryBackground", fallback: Color(.systemBackground))
     
-    /// Secondary background for cards and elevated content
+    /// Secondary background - Corporate gray hierarchy
     static let secondaryBackground = Color("SecondaryBackground", fallback: Color(.secondarySystemBackground))
     
-    /// Tertiary background for grouped content
+    /// Tertiary background - Bland corporate grouping
     static let tertiaryBackground = Color("TertiaryBackground", fallback: Color(.tertiarySystemBackground))
     
-    /// Background for cards and containers
+    /// Card background - Corporate container styling
     static let cardBackground = Color("CardBackground", fallback: Color(.systemBackground))
     
-    // MARK: - Text Colors
+    // MARK: - Corporate Text Hierarchy
     
-    /// Primary text color
+    /// Executive-level text (primary importance)
     static let primaryText = Color("PrimaryText", fallback: Color(.label))
     
-    /// Secondary text color for less important content
+    /// Middle-management text (secondary importance)
     static let secondaryText = Color("SecondaryText", fallback: Color(.secondaryLabel))
     
-    /// Tertiary text color for subtle content
+    /// Intern-level text (tertiary importance)
     static let tertiaryText = Color("TertiaryText", fallback: Color(.tertiaryLabel))
     
-    // MARK: - Accent Colors
+    // MARK: - Corporate Status Colors
     
-    /// Primary accent color (earnings, success states)
-    static let accent = Color("AccentColor", fallback: .green)
+    /// Money green (the only color that matters to corporate)
+    static let accent = Color("AccentColor", fallback: Color(red: 0.0, green: 0.6, blue: 0.0))
     
-    /// Secondary accent color
-    static let secondaryAccent = Color("SecondaryAccent", fallback: .blue)
+    /// Corporate blue (trust, stability, boring meetings)
+    static let secondaryAccent = Color("SecondaryAccent", fallback: Color(red: 0.1, green: 0.4, blue: 0.8))
     
-    /// Warning/alert color
-    static let warning = Color("WarningColor", fallback: .orange)
+    /// Warning orange (boss approaching, hide phone)
+    static let warning = Color("WarningColor", fallback: Color(red: 1.0, green: 0.6, blue: 0.0))
     
-    /// Error/danger color
-    static let error = Color("ErrorColor", fallback: .red)
+    /// Danger red (getting caught, HR involvement)
+    static let error = Color("ErrorColor", fallback: Color(red: 0.9, green: 0.2, blue: 0.2))
     
-    // MARK: - Interactive Colors
+    /// Corporate authority purple (C-suite only)
+    static let corporate = Color("CorporateColor", fallback: Color(red: 0.4, green: 0.2, blue: 0.8))
     
-    /// Color for interactive elements in normal state
-    static let interactive = Color("InteractiveColor", fallback: .blue)
+    /// Rebellion gold (time theft achievements)
+    static let rebellion = Color("RebellionColor", fallback: Color(red: 0.9, green: 0.7, blue: 0.1))
     
-    /// Color for pressed/active interactive elements
-    static let interactivePressed = Color("InteractivePressedColor", fallback: Color.blue.opacity(0.7))
+    // MARK: - Corporate Interaction Colors
+    
+    /// Interactive corporate blue (clicking costs company money)
+    static let interactive = Color("InteractiveColor", fallback: Color(red: 0.1, green: 0.4, blue: 0.8))
+    
+    /// Pressed state (actively stealing time)
+    static let interactivePressed = Color("InteractivePressedColor", fallback: Color(red: 0.1, green: 0.4, blue: 0.8).opacity(0.7))
     
     // MARK: - Border and Separator Colors
     
@@ -99,39 +105,45 @@ struct AppColors {
     /// Light overlay for subtle backgrounds
     static let lightOverlay = Color("LightOverlayColor", fallback: Color.black.opacity(0.1))
     
-    // MARK: - Gradient Colors
+    // MARK: - Corporate Gradient Schemes
     
-    /// Primary gradient colors
+    /// Money-making gradient (green to gold)
     static let gradientPrimary = [
-        Color("GradientPrimary1", fallback: .green),
-        Color("GradientPrimary2", fallback: .blue)
+        Color("GradientPrimary1", fallback: Color(red: 0.0, green: 0.6, blue: 0.0)),
+        Color("GradientPrimary2", fallback: Color(red: 0.9, green: 0.7, blue: 0.1))
     ]
     
-    /// Secondary gradient colors
+    /// Corporate authority gradient (blue to purple)
     static let gradientSecondary = [
-        Color("GradientSecondary1", fallback: .orange),
-        Color("GradientSecondary2", fallback: .red)
+        Color("GradientSecondary1", fallback: Color(red: 0.1, green: 0.4, blue: 0.8)),
+        Color("GradientSecondary2", fallback: Color(red: 0.4, green: 0.2, blue: 0.8))
     ]
     
-    /// Danger gradient colors
+    /// Warning gradient (orange to red - boss alert)
     static let gradientDanger = [
-        Color("GradientDanger1", fallback: .red),
-        Color("GradientDanger2", fallback: .orange)
+        Color("GradientDanger1", fallback: Color(red: 1.0, green: 0.6, blue: 0.0)),
+        Color("GradientDanger2", fallback: Color(red: 0.9, green: 0.2, blue: 0.2))
     ]
     
-    // MARK: - Timer Specific Colors
+    /// Rebellion gradient (gold to green - successful time theft)
+    static let gradientRebellion = [
+        Color("GradientRebellion1", fallback: Color(red: 0.9, green: 0.7, blue: 0.1)),
+        Color("GradientRebellion2", fallback: Color(red: 0.0, green: 0.6, blue: 0.0))
+    ]
     
-    /// Timer circle background
+    // MARK: - Time Theft Timer Colors
+    
+    /// Corporate gray clock background (time is money)
     static let timerBackground = Color("TimerBackground", fallback: Color(.systemGray5))
     
-    /// Timer progress colors
+    /// Money accumulation progress colors
     static let timerProgress = [
-        Color("TimerProgress1", fallback: .green),
-        Color("TimerProgress2", fallback: .blue),
-        Color("TimerProgress3", fallback: .mint)
+        Color("TimerProgress1", fallback: Color(red: 0.0, green: 0.6, blue: 0.0)),
+        Color("TimerProgress2", fallback: Color(red: 0.9, green: 0.7, blue: 0.1)),
+        Color("TimerProgress3", fallback: Color(red: 0.1, green: 0.7, blue: 0.1))
     ]
     
-    /// Timer inactive state
+    /// Inactive timer (not stealing time)
     static let timerInactive = Color("TimerInactive", fallback: Color(.systemGray4))
     
     // MARK: - Card Shadow Colors
@@ -205,5 +217,170 @@ extension View {
             x: 0,
             y: colorScheme == .dark ? 6 : 4
         )
+    }
+}
+
+// MARK: - Corporate Design System
+
+/// Standardized spacing tokens for consistent layout
+struct DesignTokens {
+    // MARK: - Spacing Scale
+    static let spacing: (
+        xs: CGFloat,
+        sm: CGFloat,
+        md: CGFloat,
+        lg: CGFloat,
+        xl: CGFloat,
+        xxl: CGFloat
+    ) = (
+        xs: 4,
+        sm: 8,
+        md: 16,
+        lg: 24,
+        xl: 32,
+        xxl: 48
+    )
+    
+    // MARK: - Corner Radius Scale
+    static let cornerRadius: (
+        sm: CGFloat,
+        md: CGFloat,
+        lg: CGFloat,
+        xl: CGFloat
+    ) = (
+        sm: 8,
+        md: 12,
+        lg: 16,
+        xl: 20
+    )
+    
+    // MARK: - Typography Scale
+    static let typography = CorporateTypography()
+}
+
+/// Corporate typography system with consistent hierarchy
+struct CorporateTypography {
+    
+    // MARK: - Headers
+    var heroTitle: Font { .system(size: 34, weight: .heavy, design: .default) }
+    var largeTitle: Font { .system(size: 28, weight: .bold, design: .default) }
+    var title1: Font { .system(size: 24, weight: .bold, design: .default) }
+    var title2: Font { .system(size: 20, weight: .semibold, design: .default) }
+    var title3: Font { .system(size: 18, weight: .semibold, design: .default) }
+    
+    // MARK: - Body Text
+    var headline: Font { .system(size: 16, weight: .semibold, design: .default) }
+    var body: Font { .system(size: 16, weight: .regular, design: .default) }
+    var bodyEmphasized: Font { .system(size: 16, weight: .medium, design: .default) }
+    var callout: Font { .system(size: 14, weight: .regular, design: .default) }
+    
+    // MARK: - Support Text
+    var subheadline: Font { .system(size: 14, weight: .medium, design: .default) }
+    var footnote: Font { .system(size: 12, weight: .regular, design: .default) }
+    var caption1: Font { .system(size: 11, weight: .medium, design: .default) }
+    var caption2: Font { .system(size: 10, weight: .medium, design: .default) }
+    
+    // MARK: - Special Purpose
+    var monospacedDigit: Font { .system(size: 16, weight: .regular, design: .monospaced) }
+    var monospacedLarge: Font { .system(size: 24, weight: .bold, design: .monospaced) }
+    var corporateHeader: Font { .system(size: 12, weight: .bold, design: .default) }
+}
+
+/// View extensions for consistent styling
+extension View {
+    // MARK: - Typography Modifiers
+    func corporateHeaderStyle() -> some View {
+        self
+            .font(DesignTokens.typography.corporateHeader)
+            .foregroundStyle(AppColors.corporate)
+            .textCase(.uppercase)
+            .tracking(1.2)
+    }
+    
+    func rebellionHeaderStyle() -> some View {
+        self
+            .font(DesignTokens.typography.title2)
+            .foregroundStyle(AppColors.rebellion)
+            .fontWeight(.bold)
+            .tracking(0.5)
+    }
+    
+    func corporateBodyStyle() -> some View {
+        self
+            .font(DesignTokens.typography.body)
+            .foregroundStyle(AppColors.primaryText)
+    }
+    
+    func corporateSubheadStyle() -> some View {
+        self
+            .font(DesignTokens.typography.subheadline)
+            .foregroundStyle(AppColors.secondaryText)
+    }
+    
+    func corporateCaptionStyle() -> some View {
+        self
+            .font(DesignTokens.typography.caption1)
+            .foregroundStyle(AppColors.tertiaryText)
+    }
+    
+    // MARK: - Card Styling
+    func corporateCardStyle(colorScheme: ColorScheme) -> some View {
+        self
+            .padding(DesignTokens.spacing.md)
+            .background(AppColors.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.md))
+            .dynamicCardShadow(colorScheme: colorScheme)
+    }
+    
+    func elevatedCardStyle(colorScheme: ColorScheme) -> some View {
+        self
+            .padding(DesignTokens.spacing.lg)
+            .background(AppColors.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.lg))
+            .dynamicElevatedShadow(colorScheme: colorScheme)
+    }
+    
+    // MARK: - Button Styling
+    func primaryButtonStyle(colorScheme: ColorScheme, isPressed: Bool = false) -> some View {
+        self
+            .font(DesignTokens.typography.headline)
+            .foregroundStyle(.white)
+            .padding(.vertical, DesignTokens.spacing.md)
+            .padding(.horizontal, DesignTokens.spacing.lg)
+            .background(
+                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.md)
+                    .fill(
+                        LinearGradient(
+                            colors: AppColors.gradientRebellion,
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+            )
+            .scaleEffect(isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: isPressed)
+            .dynamicElevatedShadow(colorScheme: colorScheme)
+    }
+    
+    func secondaryButtonStyle() -> some View {
+        self
+            .font(DesignTokens.typography.headline)
+            .foregroundStyle(AppColors.corporate)
+            .padding(.vertical, DesignTokens.spacing.md)
+            .padding(.horizontal, DesignTokens.spacing.lg)
+            .background(
+                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.md)
+                    .fill(AppColors.secondaryBackground)
+                    .stroke(AppColors.corporate, lineWidth: 1.5)
+            )
+    }
+    
+    // MARK: - Section Styling
+    func sectionContainerStyle(colorScheme: ColorScheme) -> some View {
+        self
+            .padding(DesignTokens.spacing.lg)
+            .background(AppColors.secondaryBackground)
+            .clipShape(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.lg))
+            .dynamicCardShadow(colorScheme: colorScheme)
     }
 }

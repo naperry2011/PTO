@@ -2,21 +2,21 @@ import SwiftUI
 import Foundation
 
 enum PoopType: String, CaseIterable, Codable {
-    case ghost = "Ghost"
-    case normal = "Normal"
-    case sticky = "Sticky"
-    case explosive = "Explosive"
-    case quick = "Quick"
-    case marathon = "Marathon"
+    case ghost = "Stealth Operation"
+    case normal = "Standard Procedure"
+    case sticky = "Extended Mission"
+    case explosive = "Emergency Evacuation"
+    case quick = "Lightning Strike"
+    case marathon = "Corporate Siege"
     
     var icon: String {
         switch self {
-        case .ghost: return "👻"
-        case .normal: return "💩"
-        case .sticky: return "🍯"
-        case .explosive: return "💥"
+        case .ghost: return "🕵️"
+        case .normal: return "💼"
+        case .sticky: return "⏳"
+        case .explosive: return "🚨"
         case .quick: return "⚡"
-        case .marathon: return "🏃"
+        case .marathon: return "🏆"
         }
     }
     
@@ -33,21 +33,21 @@ enum PoopType: String, CaseIterable, Codable {
 }
 
 enum MoodType: String, CaseIterable, Codable {
-    case relieved = "Relieved"
-    case satisfied = "Satisfied"
-    case struggling = "Struggling"
-    case victorious = "Victorious"
-    case rushed = "Rushed"
-    case zen = "Zen"
+    case relieved = "Mission Complete"
+    case satisfied = "Corporate Defeated"
+    case struggling = "Under Pressure"
+    case victorious = "Rebellion Victory"
+    case rushed = "Boss Approaching"
+    case zen = "Perfect Crime"
     
     var emoji: String {
         switch self {
-        case .relieved: return "😌"
-        case .satisfied: return "😊"
-        case .struggling: return "😣"
-        case .victorious: return "💪"
-        case .rushed: return "😰"
-        case .zen: return "🧘"
+        case .relieved: return "✅"
+        case .satisfied: return "🎯"
+        case .struggling: return "⚠️"
+        case .victorious: return "🏆"
+        case .rushed: return "🚨"
+        case .zen: return "😎"
         }
     }
 }
@@ -89,6 +89,40 @@ class PoopSession: Identifiable, Codable, ObservableObject {
         return String(format: "$%.2f", earnings)
     }
     
+    var rebellionLevel: String {
+        switch duration {
+        case 0..<180: // Under 3 minutes
+            return "ROOKIE REBEL"
+        case 180..<300: // 3-5 minutes
+            return "CORPORATE ANNOYANCE"
+        case 300..<600: // 5-10 minutes
+            return "TIME THEFT EXPERT"
+        case 600..<900: // 10-15 minutes
+            return "BATHROOM BOSS"
+        case 900..<1200: // 15-20 minutes
+            return "CORPORATE NEMESIS"
+        default: // 20+ minutes
+            return "LEGENDARY REBEL"
+        }
+    }
+    
+    var rebellionDescription: String {
+        switch duration {
+        case 0..<180:
+            return "Still learning the art of corporate time theft"
+        case 180..<300:
+            return "Making corporate pay, one flush at a time"
+        case 300..<600:
+            return "Professional bathroom break warrior"
+        case 600..<900:
+            return "Corporate's worst nightmare"
+        case 900..<1200:
+            return "Bathroom empire ruler"
+        default:
+            return "The stuff of corporate legend"
+        }
+    }
+    
     func endSession() {
         endTime = Date()
     }
@@ -113,7 +147,21 @@ class SessionManager: ObservableObject {
         session.endSession()
         session.poopType = type
         session.mood = mood
-        session.notes = notes
+        
+        // Add corporate rebellion context if notes are empty
+        if notes.isEmpty {
+            let corporateNotes = [
+                "Successfully completed bathroom-based corporate resistance operation",
+                "Mission accomplished - corporate funds successfully redirected",
+                "Another victory in the war against bathroom surveillance",
+                "Corporate productivity decreased by bathroom break duration",
+                "Time theft operation completed without detection"
+            ]
+            session.notes = corporateNotes.randomElement() ?? notes
+        } else {
+            session.notes = notes
+        }
+        
         sessions.insert(session, at: 0)
         saveSessions()
         currentSession = nil
@@ -137,10 +185,44 @@ class SessionManager: ObservableObject {
         String(format: "$%.2f", totalEarnings)
     }
     
+    var corporateRebellionQuote: String {
+        let quotes = [
+            "Every minute in the bathroom is a victory against corporate oppression!",
+            "Boss makes a dollar, you make a dime - that's why you poop on company time!",
+            "The revolution starts in the bathroom stall!",
+            "Corporate can't control your bathroom breaks... yet.",
+            "Time theft: It's not a crime, it's a lifestyle.",
+            "Your bathroom break is their profit loss.",
+            "Stick it to the man, one flush at a time!",
+            "Freedom isn't free, but bathroom breaks are!"
+        ]
+        return quotes.randomElement() ?? "Viva la bathroom revolución!"
+    }
+    
     var formattedAverageTime: String {
         let minutes = Int(averageSessionTime) / 60
         let seconds = Int(averageSessionTime) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    var overallRebellionLevel: String {
+        let sessionCount = sessions.count
+        switch sessionCount {
+        case 0:
+            return "CORPORATE DRONE"
+        case 1..<5:
+            return "BATHROOM ROOKIE"
+        case 5..<15:
+            return "TIME THEFT APPRENTICE"
+        case 15..<30:
+            return "REBELLION WARRIOR"
+        case 30..<50:
+            return "CORPORATE NIGHTMARE"
+        case 50..<100:
+            return "BATHROOM EMPEROR"
+        default:
+            return "LEGENDARY REBEL MASTER"
+        }
     }
     
     private func saveSessions() {

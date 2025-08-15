@@ -4,26 +4,37 @@ struct SettingsView: View {
     @EnvironmentObject var settings: UserSettings
     @State private var tempWage: String = ""
     @State private var showingAbout = false
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section {
-                    HStack {
+                    HStack(spacing: DesignTokens.spacing.sm) {
                         Image(systemName: "person.circle.fill")
-                            .font(.title2)
+                            .font(DesignTokens.typography.title3)
                             .foregroundStyle(AppColors.interactive)
                         
-                        TextField("Your Name", text: $settings.userName)
+                        TextField("Corporate Alias", text: $settings.userName)
+                            .font(DesignTokens.typography.body)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .accessibilityLabel("Corporate alias text field")
+                            .accessibilityHint("Enter your code name")
                     }
                 } header: {
-                    Text("Profile")
+                    Text("🕵️ EMPLOYEE IDENTIFICATION")
+                        .corporateHeaderStyle()
+                } footer: {
+                    Text("Use a code name to protect your identity from corporate surveillance")
+                        .corporateCaptionStyle()
+                        .italic()
                 }
                 
                 Section {
-                    HStack {
-                        Label("Hourly Wage", systemImage: "dollarsign.circle.fill")
+                    HStack(spacing: DesignTokens.spacing.md) {
+                        Label("Wage Theft Rate", systemImage: "banknote.fill")
+                            .foregroundStyle(AppColors.rebellion)
+                            .font(DesignTokens.typography.body)
                         
                         Spacer()
                         
@@ -31,6 +42,7 @@ struct SettingsView: View {
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                             .frame(width: 100)
+                            .font(DesignTokens.typography.monospacedDigit)
                             .onAppear {
                                 tempWage = String(format: "%.2f", settings.hourlyWage)
                             }
@@ -39,9 +51,11 @@ struct SettingsView: View {
                                     settings.hourlyWage = wage
                                 }
                             }
+                            .accessibilityLabel("Hourly wage input")
+                            .accessibilityValue(tempWage)
                         
                         Text(settings.currencySymbol + "/hr")
-                            .foregroundStyle(AppColors.secondaryText)
+                            .corporateSubheadStyle()
                     }
                     
                     Picker("Currency", selection: $settings.currencySymbol) {
@@ -50,104 +64,134 @@ struct SettingsView: View {
                         Text("£ GBP").tag("£")
                         Text("¥ JPY").tag("¥")
                     }
+                    .font(DesignTokens.typography.body)
+                    .accessibilityLabel("Currency selection")
                 } header: {
-                    Text("Earnings")
+                    Text("💰 TIME THEFT CONFIGURATION")
+                        .corporateHeaderStyle()
                 } footer: {
-                    Text("Your hourly wage is used to calculate earnings during bathroom breaks.")
-                        .font(.caption)
+                    Text("Configure how much you're stealing from your corporate overlords per hour.")
+                        .corporateCaptionStyle()
+                        .italic()
                 }
                 
                 Section {
                     // Appearance Mode Picker
                     Picker("Appearance", selection: $settings.appearanceMode) {
                         ForEach(AppearanceMode.allCases, id: \.self) { mode in
-                            HStack {
+                            HStack(spacing: DesignTokens.spacing.sm) {
                                 Image(systemName: mode.icon)
                                     .foregroundStyle(AppColors.secondaryText)
                                 Text(mode.displayName)
+                                    .font(DesignTokens.typography.body)
                             }
                             .tag(mode)
                         }
                     }
                     .pickerStyle(.menu)
                     .tint(AppColors.interactive)
+                    .accessibilityLabel("Appearance mode selection")
                     
                     Toggle(isOn: $settings.enableHaptics) {
                         Label("Haptic Feedback", systemImage: "iphone.radiowaves.left.and.right")
+                            .font(DesignTokens.typography.body)
                     }
                     .tint(AppColors.accent)
+                    .accessibilityHint("Enables vibration feedback for interactions")
                     
                     Toggle(isOn: $settings.enableNotifications) {
                         Label("Notifications", systemImage: "bell.badge")
+                            .font(DesignTokens.typography.body)
                     }
                     .tint(AppColors.accent)
+                    .accessibilityHint("Enables push notifications")
                 } header: {
-                    Text("Preferences")
+                    Text("⚙️ USER EXPERIENCE SETTINGS")
+                        .corporateHeaderStyle()
                 }
                 
                 Section {
                     HStack {
                         Label("Daily Earnings Goal", systemImage: "target")
+                            .font(DesignTokens.typography.body)
                         Spacer()
                         Text("Coming Soon")
-                            .foregroundStyle(AppColors.secondaryText)
-                            .font(.caption)
+                            .corporateSubheadStyle()
                     }
+                    .accessibilityLabel("Daily earnings goal feature coming soon")
                     
                     HStack {
                         Label("Export Data", systemImage: "square.and.arrow.up")
+                            .font(DesignTokens.typography.body)
                         Spacer()
                         Text("Coming Soon")
-                            .foregroundStyle(AppColors.secondaryText)
-                            .font(.caption)
+                            .corporateSubheadStyle()
                     }
+                    .accessibilityLabel("Export data feature coming soon")
                     
                     HStack {
                         Label("Achievements", systemImage: "trophy.fill")
+                            .font(DesignTokens.typography.body)
                         Spacer()
                         Text("Coming Soon")
-                            .foregroundStyle(AppColors.secondaryText)
-                            .font(.caption)
+                            .corporateSubheadStyle()
                     }
+                    .accessibilityLabel("Achievements feature coming soon")
                 } header: {
-                    Text("Advanced")
+                    Text("🚀 ADVANCED FEATURES")
+                        .corporateHeaderStyle()
                 }
                 
                 Section {
                     Button(action: { showingAbout = true }) {
                         HStack {
                             Label("About", systemImage: "info.circle")
+                                .font(DesignTokens.typography.body)
                             Spacer()
                             Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(AppColors.secondaryText)
+                                .corporateCaptionStyle()
                         }
                     }
+                    .accessibilityLabel("About this app")
+                    .accessibilityHint("Shows app information and features")
                     
                     HStack {
                         Label("Version", systemImage: "gear")
+                            .font(DesignTokens.typography.body)
                         Spacer()
                         Text("1.0.0")
-                            .foregroundStyle(AppColors.secondaryText)
+                            .corporateSubheadStyle()
                     }
+                    .accessibilityLabel("App version 1.0.0")
+                } header: {
+                    Text("📝 APP INFORMATION")
+                        .corporateHeaderStyle()
                 }
                 
                 Section {
-                    VStack(spacing: 16) {
-                        Text("💩 Fun Facts 💩")
-                            .font(.headline)
+                    VStack(spacing: DesignTokens.spacing.md) {
+                        Text("💩 CORPORATE BATHROOM INTELLIGENCE 💩")
+                            .rebellionHeaderStyle()
+                            .multilineTextAlignment(.center)
                         
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: DesignTokens.spacing.sm) {
                             FactRow(emoji: "🚽", fact: "Average person spends 3 years on the toilet")
                             FactRow(emoji: "💰", fact: "That could be $18,750 at $25/hr!")
                             FactRow(emoji: "📱", fact: "75% of people use phones in the bathroom")
                             FactRow(emoji: "⏰", fact: "Average bathroom break: 12-15 minutes")
                         }
+                        .accessibilityElement(combining: .children)
+                        .accessibilityLabel("Fun facts about bathroom habits")
                     }
-                    .padding(.vertical, 8)
+                    .padding(.vertical, DesignTokens.spacing.sm)
+                } header: {
+                    Text("🏆 BATHROOM STATISTICS")
+                        .corporateHeaderStyle()
                 }
             }
-            .navigationTitle("⚙️ Settings")
+            .navigationTitle("💼 Corporate Control Panel")
+            .navigationBarTitleDisplayMode(.automatic)
+            .accessibilityLabel("Settings and control panel")
             .sheet(isPresented: $showingAbout) {
                 AboutView()
             }
@@ -160,72 +204,84 @@ struct FactRow: View {
     let fact: String
     
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .top, spacing: DesignTokens.spacing.sm) {
             Text(emoji)
-                .font(.title3)
+                .font(DesignTokens.typography.title3)
+                .accessibilityHidden(true)
             Text(fact)
-                .font(.caption)
-                .foregroundStyle(AppColors.secondaryText)
+                .corporateCaptionStyle()
         }
+        .accessibilityElement(combining: .children)
+        .accessibilityLabel(fact)
     }
 }
 
 struct AboutView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
-                VStack(spacing: 30) {
-                    VStack(spacing: 16) {
+                VStack(spacing: DesignTokens.spacing.xl) {
+                    VStack(spacing: DesignTokens.spacing.md) {
                         Text("💩")
                             .font(.system(size: 80))
+                            .accessibilityHidden(true)
                         
                         Text("Paid to Operate")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
+                            .font(DesignTokens.typography.heroTitle)
+                            .foregroundStyle(AppColors.corporate)
                         
                         Text("Version 1.0.0")
-                            .font(.caption)
-                            .foregroundStyle(AppColors.secondaryText)
+                            .corporateCaptionStyle()
                     }
-                    .padding(.top, 20)
+                    .padding(.top, DesignTokens.spacing.lg)
+                    .accessibilityElement(combining: .children)
+                    .accessibilityLabel("Paid to Operate app, Version 1.0.0")
                     
-                    VStack(spacing: 16) {
+                    VStack(spacing: DesignTokens.spacing.md) {
                         Text("Making Money While You... You Know")
-                            .font(.headline)
+                            .rebellionHeaderStyle()
                         
                         Text("Track your earnings during bathroom breaks at work. Because if you're good at something, never do it for free!")
-                            .font(.body)
+                            .corporateBodyStyle()
                             .multilineTextAlignment(.center)
-                            .foregroundStyle(AppColors.secondaryText)
-                            .padding(.horizontal)
+                            .padding(.horizontal, DesignTokens.spacing.md)
                     }
+                    .accessibilityElement(combining: .children)
+                    .accessibilityLabel("App description: Track your earnings during bathroom breaks at work")
                     
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: DesignTokens.spacing.lg) {
                         FeatureRow(icon: "clock.fill", title: "Track Time", description: "Precise timer for your sessions")
                         FeatureRow(icon: "dollarsign.circle.fill", title: "Calculate Earnings", description: "Real-time earnings based on your wage")
                         FeatureRow(icon: "book.fill", title: "Poop Diary", description: "Log type, mood, and notes")
                         FeatureRow(icon: "chart.line.uptrend.xyaxis", title: "Statistics", description: "Track your bathroom economy")
                     }
-                    .padding(.horizontal)
+                    .sectionContainerStyle(colorScheme: colorScheme)
+                    .accessibilityElement(combining: .children)
+                    .accessibilityLabel("App features list")
                     
-                    VStack(spacing: 8) {
+                    VStack(spacing: DesignTokens.spacing.sm) {
                         Text("Remember:")
-                            .font(.headline)
+                            .rebellionHeaderStyle()
                         Text("Boss makes a dollar, I make a dime")
-                            .font(.subheadline)
+                            .corporateBodyStyle()
                         Text("That's why I poop on company time! 🚽")
-                            .font(.subheadline)
+                            .corporateBodyStyle()
                             .fontWeight(.bold)
                     }
-                    .padding()
-                    .background(AppColors.warning.opacity(0.1))
-                    .cornerRadius(15)
-                    .padding(.horizontal)
+                    .elevatedCardStyle(colorScheme: colorScheme)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.lg)
+                            .stroke(AppColors.warning, lineWidth: 2)
+                    )
+                    .accessibilityElement(combining: .children)
+                    .accessibilityLabel("App motto: Boss makes a dollar, I make a dime, that's why I poop on company time")
                     
-                    Spacer(minLength: 30)
+                    Spacer(minLength: DesignTokens.spacing.xl)
                 }
+                .padding(.horizontal, DesignTokens.spacing.md)
             }
             .navigationTitle("About")
             .navigationBarTitleDisplayMode(.inline)
@@ -246,23 +302,25 @@ struct FeatureRow: View {
     let description: String
     
     var body: some View {
-        HStack(alignment: .top, spacing: 16) {
+        HStack(alignment: .top, spacing: DesignTokens.spacing.md) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(DesignTokens.typography.title3)
                 .foregroundStyle(AppColors.interactive)
                 .frame(width: 30)
+                .accessibilityHidden(true)
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: DesignTokens.spacing.xs) {
                 Text(title)
-                    .font(.subheadline)
+                    .corporateBodyStyle()
                     .fontWeight(.semibold)
                 Text(description)
-                    .font(.caption)
-                    .foregroundStyle(AppColors.secondaryText)
+                    .corporateCaptionStyle()
             }
             
             Spacer()
         }
+        .accessibilityElement(combining: .children)
+        .accessibilityLabel("\(title): \(description)")
     }
 }
 

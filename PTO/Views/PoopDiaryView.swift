@@ -1,41 +1,52 @@
 import SwiftUI
 
 struct PoopDiaryView: View {
-    @StateObject private var sessionManager = SessionManager()
+    @ObservedObject var sessionManager: SessionManager
     @EnvironmentObject var settings: UserSettings
     @Environment(\.colorScheme) var colorScheme
     @State private var selectedSession: PoopSession?
     
+    
+    init(sessionManager: SessionManager) {
+        self.sessionManager = sessionManager
+    }
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 AppColors.primaryBackground
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    VStack(spacing: 20) {
+                    VStack(spacing: DesignTokens.spacing.lg) {
                         StatsHeaderView(sessionManager: sessionManager, settings: settings)
-                            .padding(.horizontal)
+                            .padding(.horizontal, DesignTokens.spacing.md)
                         
                         if sessionManager.sessions.isEmpty {
                             EmptyDiaryView()
-                                .padding(.top, 50)
+                                .padding(.top, DesignTokens.spacing.xxl)
                         } else {
-                            LazyVStack(spacing: 16) {
+                            LazyVStack(spacing: DesignTokens.spacing.md) {
                                 ForEach(sessionManager.sessions) { session in
                                     SessionCard(session: session, settings: settings)
                                         .onTapGesture {
                                             selectedSession = session
+                                            if settings.enableHaptics {
+                                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                            }
                                         }
+                                        .accessibilityHint("Double tap to view session details")
                                 }
                             }
-                            .padding(.horizontal)
+                            .padding(.horizontal, DesignTokens.spacing.md)
                         }
                     }
-                    .padding(.vertical)
+                    .padding(.vertical, DesignTokens.spacing.md)
                 }
             }
-            .navigationTitle("💩 Poop Diary")
+            .navigationTitle("📈 Productivity Dashboard")
+            .navigationBarTitleDisplayMode(.automatic)
+            .accessibilityLabel("Dashboard showing bathroom break statistics and session history")
             .sheet(item: $selectedSession) { session in
                 SessionDetailView(session: session, settings: settings)
             }
@@ -46,35 +57,47 @@ struct PoopDiaryView: View {
 struct StatsHeaderView: View {
     @ObservedObject var sessionManager: SessionManager
     let settings: UserSettings
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack(spacing: 16) {
-            Text("Your Stats")
-                .font(.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(spacing: DesignTokens.spacing.lg) {
+            VStack(alignment: .leading, spacing: DesignTokens.spacing.sm) {
+                Text("🏆 QUARTERLY PERFORMANCE METRICS")
+                    .rebellionHeaderStyle()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityLabel("Performance metrics section")
+                
+                Text("Time Theft Division - Bathroom Operations Department")
+                    .corporateCaptionStyle()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .italic()
+                    .accessibilityLabel("Department subtitle")
+            }
             
-            HStack(spacing: 16) {
+            HStack(spacing: DesignTokens.spacing.sm) {
                 StatCard(
-                    title: "Total Earned",
+                    title: "Revenue Theft",
                     value: sessionManager.formattedTotalEarnings,
-                    icon: "dollarsign.circle.fill",
-                    color: .green
+                    icon: "banknote.fill",
+                    color: AppColors.rebellion
                 )
                 
                 StatCard(
-                    title: "Sessions",
+                    title: "Operations",
                     value: "\(sessionManager.sessions.count)",
-                    icon: "number.circle.fill",
-                    color: .blue
+                    icon: "briefcase.fill",
+                    color: AppColors.corporate
                 )
                 
                 StatCard(
-                    title: "Avg Time",
+                    title: "Avg Efficiency",
                     value: sessionManager.formattedAverageTime,
-                    icon: "clock.fill",
-                    color: .orange
+                    icon: "chart.line.uptrend.xyaxis",
+                    color: AppColors.warning
                 )
             }
+            .accessibilityElement(combining: .children)
+            .accessibilityLabel("Performance statistics")
         }
     }
 }
@@ -87,25 +110,24 @@ struct StatCard: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DesignTokens.spacing.sm) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(DesignTokens.typography.title3)
                 .foregroundStyle(color)
             
             Text(value)
-                .font(.headline)
-                .fontWeight(.bold)
+                .font(DesignTokens.typography.monospacedLarge)
                 .foregroundStyle(AppColors.primaryText)
+                .monospacedDigit()
             
             Text(title)
-                .font(.caption)
+                .corporateHeaderStyle()
                 .foregroundStyle(AppColors.secondaryText)
         }
         .frame(maxWidth: .infinity)
-        .padding()
-        .background(AppColors.secondaryBackground)
-        .cornerRadius(15)
-        .dynamicCardShadow(colorScheme: colorScheme)
+        .corporateCardStyle(colorScheme: colorScheme)
+        .accessibilityElement(combining: .children)
+        .accessibilityLabel("\(title): \(value)")
     }
 }
 
@@ -122,66 +144,93 @@ struct SessionCard: View {
     }
     
     var body: some View {
-        HStack(spacing: 16) {
-            VStack(spacing: 4) {
+        HStack(spacing: DesignTokens.spacing.md) {
+            VStack(spacing: DesignTokens.spacing.xs) {
                 Text(session.poopType?.icon ?? "💩")
                     .font(.largeTitle)
+                    .accessibilityLabel("Operation type: \(session.poopType?.rawValue ?? "Unknown")")
                 Text(session.mood?.emoji ?? "😊")
-                    .font(.title2)
+                    .font(DesignTokens.typography.title3)
+                    .accessibilityLabel("Mood: \(session.mood?.rawValue ?? "Unknown")")
             }
             
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: DesignTokens.spacing.sm) {
                 Text(dateFormatter.string(from: session.startTime))
-                    .font(.subheadline)
-                    .foregroundStyle(AppColors.secondaryText)
+                    .corporateSubheadStyle()
+                    .accessibilityLabel("Date: \(dateFormatter.string(from: session.startTime))")
                 
-                HStack(spacing: 12) {
+                HStack(spacing: DesignTokens.spacing.sm) {
                     Label(session.formattedDuration, systemImage: "clock")
-                        .font(.caption)
+                        .corporateCaptionStyle()
+                        .accessibilityLabel("Duration: \(session.formattedDuration)")
                     
                     Label(session.formattedEarnings, systemImage: "dollarsign.circle")
-                        .font(.caption)
+                        .corporateCaptionStyle()
                         .foregroundStyle(AppColors.accent)
+                        .accessibilityLabel("Earnings: \(session.formattedEarnings)")
                 }
                 
                 if !session.notes.isEmpty {
                     Text(session.notes)
-                        .font(.caption)
-                        .foregroundStyle(AppColors.secondaryText)
+                        .corporateCaptionStyle()
                         .lineLimit(2)
+                        .accessibilityLabel("Notes: \(session.notes)")
                 }
             }
             
             Spacer()
             
             Image(systemName: "chevron.right")
-                .font(.caption)
-                .foregroundStyle(AppColors.secondaryText)
+                .corporateCaptionStyle()
+                .accessibilityHidden(true)
         }
-        .padding()
-        .background(AppColors.cardBackground)
-        .cornerRadius(15)
-        .dynamicCardShadow(colorScheme: colorScheme)
+        .corporateCardStyle(colorScheme: colorScheme)
+        .accessibilityElement(combining: .children)
+        .accessibilityHint("Session from \(dateFormatter.string(from: session.startTime))")
     }
 }
 
 struct EmptyDiaryView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
-        VStack(spacing: 20) {
-            Text("🚽")
-                .font(.system(size: 80))
+        VStack(spacing: DesignTokens.spacing.lg) {
+            VStack(spacing: DesignTokens.spacing.sm) {
+                Text("💼")
+                    .font(.system(size: 64))
+                    .accessibilityHidden(true)
+                Text("🚽")
+                    .font(.system(size: 48))
+                    .accessibilityHidden(true)
+            }
             
-            Text("No Sessions Yet")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundStyle(AppColors.primaryText)
+            VStack(spacing: DesignTokens.spacing.sm) {
+                Text("NO TIME THEFT OPERATIONS")
+                    .rebellionHeaderStyle()
+                    .multilineTextAlignment(.center)
+                
+                Text("DETECTED")
+                    .rebellionHeaderStyle()
+                    .foregroundStyle(AppColors.error)
+                    .multilineTextAlignment(.center)
+            }
+            .accessibilityElement(combining: .children)
+            .accessibilityLabel("No time theft operations detected")
             
-            Text("Start your first paid bathroom break!")
-                .font(.subheadline)
-                .foregroundStyle(AppColors.secondaryText)
-                .multilineTextAlignment(.center)
+            VStack(spacing: DesignTokens.spacing.sm) {
+                Text("Initiate your first corporate rebellion!")
+                    .corporateBodyStyle()
+                    .multilineTextAlignment(.center)
+                
+                Text("The man won't pay himself while you poop...")
+                    .corporateSubheadStyle()
+                    .multilineTextAlignment(.center)
+                    .italic()
+            }
+            .accessibilityElement(combining: .children)
+            .accessibilityLabel("Initiate your first corporate rebellion! The man won't pay himself while you poop...")
         }
-        .padding()
+        .sectionContainerStyle(colorScheme: colorScheme)
     }
 }
 
@@ -199,39 +248,42 @@ struct SessionDetailView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
-                VStack(spacing: 30) {
-                    VStack(spacing: 16) {
-                        HStack(spacing: 20) {
+                VStack(spacing: DesignTokens.spacing.xl) {
+                    VStack(spacing: DesignTokens.spacing.md) {
+                        HStack(spacing: DesignTokens.spacing.lg) {
                             Text(session.poopType?.icon ?? "💩")
                                 .font(.system(size: 60))
+                                .accessibilityLabel("Operation type: \(session.poopType?.rawValue ?? "Unknown")")
                             Text(session.mood?.emoji ?? "😊")
                                 .font(.system(size: 60))
+                                .accessibilityLabel("Mood: \(session.mood?.rawValue ?? "Unknown")")
                         }
                         
                         Text(dateFormatter.string(from: session.startTime))
-                            .font(.headline)
+                            .rebellionHeaderStyle()
                             .foregroundStyle(AppColors.secondaryText)
+                            .accessibilityLabel("Session date: \(dateFormatter.string(from: session.startTime))")
                     }
                     
-                    HStack(spacing: 20) {
+                    HStack(spacing: DesignTokens.spacing.md) {
                         DetailCard(
                             title: "Duration",
                             value: session.formattedDuration,
                             icon: "clock.fill",
-                            color: .blue
+                            color: AppColors.warning
                         )
                         
                         DetailCard(
                             title: "Earned",
                             value: session.formattedEarnings,
                             icon: "dollarsign.circle.fill",
-                            color: .green
+                            color: AppColors.rebellion
                         )
                     }
                     
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: DesignTokens.spacing.md) {
                         if let type = session.poopType {
                             DetailRow(label: "Type", value: type.rawValue, icon: type.icon)
                         }
@@ -243,33 +295,34 @@ struct SessionDetailView: View {
                         DetailRow(label: "Hourly Rate", value: settings.formatEarnings(session.hourlyWage) + "/hr", icon: "💰")
                         
                         if !session.notes.isEmpty {
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading, spacing: DesignTokens.spacing.sm) {
                                 Label("Notes", systemImage: "note.text")
-                                    .font(.headline)
+                                    .rebellionHeaderStyle()
+                                    .accessibilityLabel("Session notes")
                                 
                                 Text(session.notes)
-                                    .font(.body)
-                                    .foregroundStyle(AppColors.primaryText)
-                                    .padding()
+                                    .corporateBodyStyle()
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(AppColors.secondaryBackground)
-                                    .cornerRadius(10)
+                                    .corporateCardStyle(colorScheme: colorScheme)
+                                    .accessibilityLabel("Notes: \(session.notes)")
                             }
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, DesignTokens.spacing.md)
                     
                     Spacer()
                 }
-                .padding(.vertical)
+                .padding(.vertical, DesignTokens.spacing.md)
             }
             .navigationTitle("Session Details")
             .navigationBarTitleDisplayMode(.inline)
+            .accessibilityLabel("Session details view")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
                     }
+                    .accessibilityLabel("Close session details")
                 }
             }
         }
@@ -281,26 +334,31 @@ struct DetailCard: View {
     let value: String
     let icon: String
     let color: Color
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DesignTokens.spacing.sm) {
             Image(systemName: icon)
-                .font(.title)
+                .font(DesignTokens.typography.title2)
                 .foregroundStyle(color)
             
             Text(value)
-                .font(.title2)
-                .fontWeight(.bold)
+                .font(DesignTokens.typography.monospacedLarge)
                 .foregroundStyle(AppColors.primaryText)
+                .monospacedDigit()
             
             Text(title)
-                .font(.caption)
+                .corporateHeaderStyle()
                 .foregroundStyle(AppColors.secondaryText)
         }
         .frame(maxWidth: .infinity)
-        .padding()
-        .background(color.opacity(0.1))
-        .cornerRadius(15)
+        .corporateCardStyle(colorScheme: colorScheme)
+        .background(
+            RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.md)
+                .fill(color.opacity(0.1))
+        )
+        .accessibilityElement(combining: .children)
+        .accessibilityLabel("\(title): \(value)")
     }
 }
 
@@ -308,27 +366,27 @@ struct DetailRow: View {
     let label: String
     let value: String
     let icon: String
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        HStack {
+        HStack(spacing: DesignTokens.spacing.md) {
             Text(icon)
-                .font(.title2)
+                .font(DesignTokens.typography.title3)
+                .accessibilityHidden(true)
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: DesignTokens.spacing.xs) {
                 Text(label)
-                    .font(.caption)
-                    .foregroundStyle(AppColors.secondaryText)
+                    .corporateCaptionStyle()
                 Text(value)
-                    .font(.body)
+                    .corporateBodyStyle()
                     .fontWeight(.medium)
-                    .foregroundStyle(AppColors.primaryText)
             }
             
             Spacer()
         }
-        .padding()
-        .background(AppColors.secondaryBackground)
-        .cornerRadius(10)
+        .corporateCardStyle(colorScheme: colorScheme)
+        .accessibilityElement(combining: .children)
+        .accessibilityLabel("\(label): \(value)")
     }
 }
 

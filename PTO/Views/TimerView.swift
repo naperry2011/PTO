@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TimerView: View {
-    @StateObject private var sessionManager = SessionManager()
+    @ObservedObject var sessionManager: SessionManager
     @EnvironmentObject var settings: UserSettings
     @Environment(\.colorScheme) var colorScheme
     @State private var timerCancellable: Timer?
@@ -12,6 +12,11 @@ struct TimerView: View {
     @State private var pulseAnimation = false
     @State private var circleProgress: CGFloat = 0
     
+    
+    init(sessionManager: SessionManager) {
+        self.sessionManager = sessionManager
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -20,18 +25,33 @@ struct TimerView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    VStack(spacing: 32) {
-                        // Header Section
-                        VStack(spacing: 12) {
-                            Text("💩 Paid to Operate 💵")
-                                .font(.largeTitle.bold())
-                                .foregroundStyle(AppColors.primaryText)
+                    VStack(spacing: DesignTokens.spacing.xl) {
+                        // Corporate Header Section
+                        VStack(spacing: DesignTokens.spacing.md) {
+                            VStack(spacing: DesignTokens.spacing.sm) {
+                                Text("💼 CORPORATE TIME THEFT DIVISION 🚽")
+                                    .font(DesignTokens.typography.heroTitle)
+                                    .foregroundStyle(AppColors.corporate)
+                                    .multilineTextAlignment(.center)
+                                    .accessibilityLabel("Corporate Time Theft Division")
+                                
+                                Text("Department of Bathroom-Based Revenue Generation")
+                                    .corporateHeaderStyle()
+                                    .accessibilityLabel("Department subtitle")
+                            }
                             
-                            Text(settings.formattedWage)
-                                .font(.title2.weight(.medium))
-                                .foregroundStyle(AppColors.secondaryText)
+                            VStack(spacing: DesignTokens.spacing.xs) {
+                                Text("Current Wage Theft Rate")
+                                    .corporateHeaderStyle()
+                                    .accessibilityLabel("Current hourly wage rate label")
+                                
+                                Text(settings.formattedWage)
+                                    .font(DesignTokens.typography.title1)
+                                    .foregroundStyle(AppColors.rebellion)
+                                    .accessibilityLabel("Hourly wage: \(settings.formattedWage)")
+                            }
                         }
-                        .padding(.top, 20)
+                        .padding(.top, DesignTokens.spacing.lg)
                         
                         // Modern Timer Circle with enhanced visuals
                         ZStack {
@@ -43,6 +63,7 @@ struct TimerView: View {
                                 )
                                 .frame(width: 280, height: 280)
                                 .dynamicCardShadow(colorScheme: colorScheme)
+                                .accessibilityHidden(true)
                             
                             // Progress circle with smooth animation
                             Circle()
@@ -60,53 +81,69 @@ struct TimerView: View {
                                 .frame(width: 280, height: 280)
                                 .rotationEffect(.degrees(-90))
                                 .animation(.spring(response: 0.8, dampingFraction: 0.8), value: circleProgress)
+                                .accessibilityLabel("Timer progress: \(Int(circleProgress * 100)) percent complete")
                             
-                            // Center content with modern typography
-                            VStack(spacing: 20) {
-                                Text(formatTime(elapsedTime))
-                                    .font(.system(size: 52, weight: .bold, design: .rounded))
-                                    .foregroundStyle(AppColors.primaryText)
-                                    .monospacedDigit()
+                            // Corporate Timer Display
+                            VStack(spacing: DesignTokens.spacing.lg) {
+                                VStack(spacing: DesignTokens.spacing.sm) {
+                                    Text(isRunning ? "TIME THEFT IN PROGRESS" : "OPERATION STANDBY")
+                                        .corporateHeaderStyle()
+                                        .foregroundStyle(isRunning ? AppColors.warning : AppColors.secondaryText)
+                                        .accessibilityLabel(isRunning ? "Timer is running" : "Timer is stopped")
+                                    
+                                    Text(formatTime(elapsedTime))
+                                        .font(.system(size: 48, weight: .bold, design: .monospaced))
+                                        .foregroundStyle(AppColors.primaryText)
+                                        .monospacedDigit()
+                                        .accessibilityLabel("Elapsed time: \(formatTime(elapsedTime))")
+                                }
                                 
-                                VStack(spacing: 8) {
-                                    Text("Earned")
-                                        .font(.subheadline.weight(.medium))
+                                VStack(spacing: DesignTokens.spacing.sm) {
+                                    Text("💰 STOLEN FROM THE MAN 💰")
+                                        .corporateHeaderStyle()
                                         .foregroundStyle(AppColors.secondaryText)
-                                        .textCase(.uppercase)
-                                        .tracking(1)
+                                        .accessibilityLabel("Earnings tracker")
                                     
                                     Text(settings.formatEarnings(currentEarnings))
-                                        .font(.title.bold())
-                                        .foregroundStyle(AppColors.accent)
-                                        .scaleEffect(pulseAnimation ? 1.08 : 1.0)
+                                        .font(.system(size: 28, weight: .black, design: .rounded))
+                                        .foregroundStyle(AppColors.rebellion)
+                                        .scaleEffect(pulseAnimation ? 1.12 : 1.0)
                                         .animation(
-                                            .easeInOut(duration: 1.2).repeatForever(autoreverses: true),
+                                            .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
                                             value: pulseAnimation
                                         )
+                                        .accessibilityLabel("Current earnings: \(settings.formatEarnings(currentEarnings))")
+                                    
+                                    Text("Boss makes a dollar, you make a dime...")
+                                        .corporateCaptionStyle()
+                                        .italic()
+                                        .accessibilityHidden(true)
                                 }
                             }
                         }
                         
-                        // Modern action button with haptic feedback
+                        // Corporate Action Button
                         Button(action: toggleTimer) {
-                            HStack(spacing: 12) {
-                                Image(systemName: isRunning ? "stop.fill" : "play.fill")
-                                    .font(.title2.weight(.semibold))
+                            HStack(spacing: DesignTokens.spacing.sm) {
+                                Image(systemName: isRunning ? "stop.circle.fill" : "play.circle.fill")
+                                    .font(DesignTokens.typography.title3)
                                     .foregroundStyle(.white)
                                 
-                                Text(isRunning ? "End Session" : "Start Session")
-                                    .font(.title2.weight(.semibold))
+                                Text(isRunning ? "CEASE TIME THEFT" : "INITIATE OPERATION")
+                                    .font(DesignTokens.typography.headline)
                                     .foregroundStyle(.white)
+                                    .tracking(0.5)
+                                    .textCase(.uppercase)
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 20)
+                            .padding(.vertical, DesignTokens.spacing.lg)
                             .background(
-                                RoundedRectangle(cornerRadius: 16)
+                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.lg)
                                     .fill(
                                         LinearGradient(
                                             colors: isRunning 
                                                 ? AppColors.gradientDanger
-                                                : AppColors.gradientPrimary,
+                                                : AppColors.gradientRebellion,
                                             startPoint: .leading,
                                             endPoint: .trailing
                                         )
@@ -114,44 +151,59 @@ struct TimerView: View {
                                     .dynamicElevatedShadow(colorScheme: colorScheme)
                             )
                         }
-                        .padding(.horizontal)
+                        .accessibilityLabel(isRunning ? "Stop timer" : "Start timer")
+                        .accessibilityHint(isRunning ? "Stops the current session and opens completion form" : "Starts tracking your bathroom break session")
+                        .padding(.horizontal, DesignTokens.spacing.md)
                         .scaleEffect(isRunning ? 0.98 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isRunning)
                         
-                        // Status indicator with modern styling
+                        // Corporate Status Alert
                         if isRunning {
-                            VStack(spacing: 12) {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "toilet")
-                                        .font(.title2)
+                            VStack(spacing: DesignTokens.spacing.md) {
+                                HStack(spacing: DesignTokens.spacing.sm) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .font(DesignTokens.typography.title3)
                                         .foregroundStyle(AppColors.warning)
                                     
-                                    Text("Session in Progress")
-                                        .font(.headline.weight(.medium))
+                                    Text("ACTIVE WAGE THEFT DETECTED")
+                                        .rebellionHeaderStyle()
                                         .foregroundStyle(AppColors.primaryText)
                                 }
                                 
-                                Text("Making money while you... you know")
-                                    .font(.subheadline)
-                                    .foregroundStyle(AppColors.secondaryText)
-                                    .multilineTextAlignment(.center)
+                                VStack(spacing: DesignTokens.spacing.sm) {
+                                    Text("🎯 OPERATION: BATHROOM BREAK")
+                                        .corporateBodyStyle()
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(AppColors.corporate)
+                                    
+                                    Text("Status: Successfully sticking it to the man")
+                                        .corporateSubheadStyle()
+                                        .multilineTextAlignment(.center)
+                                }
                             }
-                            .padding(.vertical, 16)
-                            .padding(.horizontal, 24)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(AppColors.warning.opacity(0.1))
-                                    .stroke(AppColors.warning.opacity(0.3), lineWidth: 1)
+                            .sectionContainerStyle(colorScheme: colorScheme)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.lg)
+                                    .stroke(
+                                        LinearGradient(
+                                            colors: [AppColors.warning, AppColors.error],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        ),
+                                        lineWidth: 2
+                                    )
                             )
                             .transition(.asymmetric(
                                 insertion: .scale.combined(with: .opacity),
                                 removal: .scale.combined(with: .opacity)
                             ))
+                            .accessibilityLabel("Timer is currently running")
+                            .accessibilityValue("Operation in progress")
                         }
                         
-                        Spacer(minLength: 60)
+                        Spacer(minLength: DesignTokens.spacing.xxl)
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, DesignTokens.spacing.md)
                 }
             }
             .navigationBarHidden(true)
@@ -246,42 +298,57 @@ struct SessionLoggingSheet: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 32) {
-                    // Celebration header with modern styling
-                    VStack(spacing: 20) {
-                        Text("🎉 Session Complete!")
-                            .font(.largeTitle.bold())
-                            .foregroundStyle(AppColors.primaryText)
+                VStack(spacing: DesignTokens.spacing.xl) {
+                    // Corporate Mission Accomplished Header
+                    VStack(spacing: DesignTokens.spacing.lg) {
+                        VStack(spacing: DesignTokens.spacing.sm) {
+                            Text("🏆 MISSION ACCOMPLISHED 🏆")
+                                .font(DesignTokens.typography.heroTitle)
+                                .foregroundStyle(AppColors.rebellion)
+                                .multilineTextAlignment(.center)
+                                .accessibilityLabel("Mission accomplished")
+                            
+                            Text("Time Theft Operation Complete")
+                                .corporateHeaderStyle()
+                                .accessibilityLabel("Operation completion subtitle")
+                        }
                         
-                        // Stats cards with modern design
-                        HStack(spacing: 16) {
+                        // Corporate Performance Metrics
+                        HStack(spacing: DesignTokens.spacing.md) {
                             StatsSummaryCard(
-                                title: "Duration",
+                                title: "Time Stolen",
                                 value: formatTime(duration),
-                                icon: "clock.fill",
-                                color: .blue
+                                icon: "clock.badge.exclamationmark.fill",
+                                color: AppColors.warning
                             )
                             
                             StatsSummaryCard(
-                                title: "Earned",
+                                title: "Profit Gained",
                                 value: settings.formatEarnings(earnings),
-                                icon: "dollarsign.circle.fill",
-                                color: .green
+                                icon: "banknote.fill",
+                                color: AppColors.rebellion
                             )
                         }
                     }
                     
-                    // Selection sections with improved UX
-                    VStack(alignment: .leading, spacing: 24) {
-                        Text("How was your session?")
-                            .font(.title2.weight(.semibold))
-                            .foregroundStyle(AppColors.primaryText)
+                    // Corporate Performance Assessment
+                    VStack(alignment: .leading, spacing: DesignTokens.spacing.lg) {
+                        VStack(alignment: .leading, spacing: DesignTokens.spacing.sm) {
+                            Text("📈 PERFORMANCE EVALUATION")
+                                .rebellionHeaderStyle()
+                                .accessibilityLabel("Performance evaluation section")
+                            
+                            Text("Please rate your anti-corporate bathroom experience")
+                                .corporateCaptionStyle()
+                                .italic()
+                                .accessibilityHint("Rate your session type and mood")
+                        }
                         
-                        // Type selection with modern cards
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("Type")
-                                .font(.headline.weight(.medium))
-                                .foregroundStyle(AppColors.secondaryText)
+                        // Mission Type Classification
+                        VStack(alignment: .leading, spacing: DesignTokens.spacing.md) {
+                            Text("OPERATION CLASSIFICATION")
+                                .corporateHeaderStyle()
+                                .accessibilityLabel("Select operation type")
                             
                             LazyVGrid(columns: [
                                 GridItem(.adaptive(minimum: 110, maximum: 140))
@@ -300,11 +367,11 @@ struct SessionLoggingSheet: View {
                             }
                         }
                         
-                        // Mood selection with modern cards
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("Mood")
-                                .font(.headline.weight(.medium))
-                                .foregroundStyle(AppColors.secondaryText)
+                        // Corporate Satisfaction Survey
+                        VStack(alignment: .leading, spacing: DesignTokens.spacing.md) {
+                            Text("REBELLION SATISFACTION LEVEL")
+                                .corporateHeaderStyle()
+                                .accessibilityLabel("Select satisfaction mood")
                             
                             LazyVGrid(columns: [
                                 GridItem(.adaptive(minimum: 110, maximum: 140))
@@ -323,59 +390,56 @@ struct SessionLoggingSheet: View {
                             }
                         }
                         
-                        // Notes section with modern text field
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Notes (Optional)")
-                                .font(.headline.weight(.medium))
-                                .foregroundStyle(AppColors.secondaryText)
+                        // Corporate Incident Report
+                        VStack(alignment: .leading, spacing: DesignTokens.spacing.sm) {
+                            Text("INCIDENT REPORT (Optional)")
+                                .corporateHeaderStyle()
+                                .accessibilityLabel("Optional notes field")
                             
-                            TextField("Add any thoughts...", text: $notes, axis: .vertical)
+                            Text("Document any suspicious corporate activity...")
+                                .corporateCaptionStyle()
+                                .italic()
+                            
+                            TextField("Boss walked by, narrowly avoided detection...", text: $notes, axis: .vertical)
                                 .focused($notesFieldFocused)
                                 .textFieldStyle(.roundedBorder)
                                 .lineLimit(3...6)
-                                .font(.body)
+                                .font(DesignTokens.typography.body)
+                                .accessibilityLabel("Session notes text field")
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, DesignTokens.spacing.md)
                     
-                    // Save button with modern styling
+                    // Corporate Submit Button
                     Button(action: saveSession) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.title3)
-                            Text("Save to Diary")
-                                .font(.headline.weight(.semibold))
+                        HStack(spacing: DesignTokens.spacing.sm) {
+                            Image(systemName: "doc.badge.plus")
+                                .font(DesignTokens.typography.title3)
+                            Text("SUBMIT TO TIME THEFT ARCHIVE")
+                                .font(DesignTokens.typography.headline)
+                                .tracking(0.3)
+                                .textCase(.uppercase)
                         }
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(
-                                    LinearGradient(
-                                        colors: AppColors.gradientPrimary,
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .dynamicElevatedShadow(colorScheme: colorScheme)
-                        )
+                        .primaryButtonStyle(colorScheme: colorScheme)
                     }
-                    .padding(.horizontal)
+                    .accessibilityLabel("Submit session")
+                    .accessibilityHint("Saves your bathroom break session to the archive")
+                    .padding(.horizontal, DesignTokens.spacing.md)
                     
-                    Spacer(minLength: 20)
+                    Spacer(minLength: DesignTokens.spacing.lg)
                 }
-                .padding(.vertical)
+                .padding(.vertical, DesignTokens.spacing.md)
             }
-            .navigationTitle("Log Session")
+            .navigationTitle("Mission Debrief")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("ABORT") {
                         sessionManager.cancelSession()
                         dismiss()
                     }
-                    .foregroundStyle(.red)
+                    .foregroundStyle(AppColors.error)
+                    .font(.caption.weight(.bold))
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -415,31 +479,32 @@ struct StatsSummaryCard: View {
     let value: String
     let icon: String
     let color: Color
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DesignTokens.spacing.sm) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(DesignTokens.typography.title3)
                 .foregroundStyle(color)
             
             Text(value)
-                .font(.title3.weight(.bold))
+                .font(DesignTokens.typography.monospacedLarge)
                 .foregroundStyle(AppColors.primaryText)
                 .monospacedDigit()
             
             Text(title)
-                .font(.caption.weight(.medium))
+                .corporateHeaderStyle()
                 .foregroundStyle(AppColors.secondaryText)
-                .textCase(.uppercase)
-                .tracking(0.5)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 20)
+        .corporateCardStyle(colorScheme: colorScheme)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.md)
                 .fill(color.opacity(0.1))
                 .stroke(color.opacity(0.2), lineWidth: 1)
         )
+        .accessibilityElement(combining: .children)
+        .accessibilityLabel("\(title): \(value)")
     }
 }
 
@@ -447,21 +512,23 @@ struct TypeSelectionCard: View {
     let type: PoopType
     let isSelected: Bool
     let action: () -> Void
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
+            VStack(spacing: DesignTokens.spacing.sm) {
                 Text(type.icon)
                     .font(.system(size: 32))
                 
                 Text(type.rawValue)
-                    .font(.caption.weight(.medium))
+                    .corporateCaptionStyle()
                     .foregroundStyle(AppColors.primaryText)
+                    .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
+            .padding(.vertical, DesignTokens.spacing.md)
             .background(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.sm)
                     .fill(isSelected ? type.color.opacity(0.15) : AppColors.secondaryBackground)
                     .stroke(
                         isSelected ? type.color : Color.clear,
@@ -472,6 +539,9 @@ struct TypeSelectionCard: View {
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
         }
         .buttonStyle(PlainButtonStyle())
+        .accessibilityLabel(type.rawValue)
+        .accessibilityHint("Select this operation type")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
@@ -479,21 +549,23 @@ struct MoodSelectionCard: View {
     let mood: MoodType
     let isSelected: Bool
     let action: () -> Void
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
+            VStack(spacing: DesignTokens.spacing.sm) {
                 Text(mood.emoji)
                     .font(.system(size: 32))
                 
                 Text(mood.rawValue)
-                    .font(.caption.weight(.medium))
+                    .corporateCaptionStyle()
                     .foregroundStyle(AppColors.primaryText)
+                    .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
+            .padding(.vertical, DesignTokens.spacing.md)
             .background(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius.sm)
                     .fill(isSelected ? AppColors.interactive.opacity(0.15) : AppColors.secondaryBackground)
                     .stroke(
                         isSelected ? AppColors.interactive : Color.clear,
@@ -504,6 +576,9 @@ struct MoodSelectionCard: View {
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
         }
         .buttonStyle(PlainButtonStyle())
+        .accessibilityLabel(mood.rawValue)
+        .accessibilityHint("Select this mood")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
