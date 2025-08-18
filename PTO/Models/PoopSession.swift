@@ -2,7 +2,7 @@ import SwiftUI
 import Foundation
 
 enum PoopType: String, CaseIterable, Codable {
-    case ghost = "Stealth Operation"
+    case ghost = "Quick Break"
     case normal = "Standard Procedure"
     case sticky = "Extended Mission"
     case explosive = "Emergency Evacuation"
@@ -96,7 +96,7 @@ class PoopSession: Identifiable, Codable, ObservableObject {
         case 180..<300: // 3-5 minutes
             return "CORPORATE ANNOYANCE"
         case 300..<600: // 5-10 minutes
-            return "TIME THEFT EXPERT"
+            return "BREAK TIME PRO"
         case 600..<900: // 10-15 minutes
             return "BATHROOM BOSS"
         case 900..<1200: // 15-20 minutes
@@ -109,7 +109,7 @@ class PoopSession: Identifiable, Codable, ObservableObject {
     var rebellionDescription: String {
         switch duration {
         case 0..<180:
-            return "Still learning the art of corporate time theft"
+            return "Building your break time analytics"
         case 180..<300:
             return "Making corporate pay, one flush at a time"
         case 300..<600:
@@ -155,7 +155,7 @@ class SessionManager: ObservableObject {
                 "Mission accomplished - corporate funds successfully redirected",
                 "Another victory in the war against bathroom surveillance",
                 "Corporate productivity decreased by bathroom break duration",
-                "Time theft operation completed without detection"
+                "Break completed successfully"
             ]
             session.notes = corporateNotes.randomElement() ?? notes
         } else {
@@ -191,7 +191,7 @@ class SessionManager: ObservableObject {
             "Boss makes a dollar, you make a dime - that's why you poop on company time!",
             "The revolution starts in the bathroom stall!",
             "Corporate can't control your bathroom breaks... yet.",
-            "Time theft: It's not a crime, it's a lifestyle.",
+            "Taking breaks: Essential for productivity.",
             "Your bathroom break is their profit loss.",
             "Stick it to the man, one flush at a time!",
             "Freedom isn't free, but bathroom breaks are!"
@@ -213,7 +213,7 @@ class SessionManager: ObservableObject {
         case 1..<5:
             return "BATHROOM ROOKIE"
         case 5..<15:
-            return "TIME THEFT APPRENTICE"
+            return "BREAK TIME BEGINNER"
         case 15..<30:
             return "REBELLION WARRIOR"
         case 30..<50:

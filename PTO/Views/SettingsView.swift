@@ -32,7 +32,7 @@ struct SettingsView: View {
                 
                 Section {
                     HStack(spacing: DesignTokens.spacing.md) {
-                        Label("Wage Theft Rate", systemImage: "banknote.fill")
+                        Label("Hourly Rate", systemImage: "banknote.fill")
                             .foregroundStyle(AppColors.rebellion)
                             .font(DesignTokens.typography.body)
                         
@@ -67,10 +67,10 @@ struct SettingsView: View {
                     .font(DesignTokens.typography.body)
                     .accessibilityLabel("Currency selection")
                 } header: {
-                    Text("💰 TIME THEFT CONFIGURATION")
+                    Text("💰 EARNINGS CONFIGURATION")
                         .corporateHeaderStyle()
                 } footer: {
-                    Text("Configure how much you're stealing from your corporate overlords per hour.")
+                    Text("Configure your hourly rate for break time calculations.")
                         .corporateCaptionStyle()
                         .italic()
                 }

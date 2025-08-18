@@ -28,11 +28,11 @@ struct TimerView: View {
                     VStack(spacing: DesignTokens.spacing.xl) {
                         // Simplified Header Section
                         VStack(spacing: DesignTokens.spacing.md) {
-                            Text("💼 TIME THEFT OPERATIONS 🚽")
+                            Text("💼 BREAK TRACKING 🚽")
                                 .font(DesignTokens.typography.title1)
                                 .foregroundStyle(AppColors.corporate)
                                 .multilineTextAlignment(.center)
-                                .accessibilityLabel("Time Theft Operations")
+                                .accessibilityLabel("Break Tracking")
                             
                             HStack(spacing: DesignTokens.spacing.sm) {
                                 Text("Earning Rate:")
@@ -261,7 +261,7 @@ struct SessionLoggingSheet: View {
                                 .multilineTextAlignment(.center)
                                 .accessibilityLabel("Mission accomplished")
                             
-                            Text("Time Theft Operation Complete")
+                            Text("Break Session Complete")
                                 .corporateHeaderStyle()
                                 .accessibilityLabel("Operation completion subtitle")
                         }
@@ -368,7 +368,7 @@ struct SessionLoggingSheet: View {
                         HStack(spacing: DesignTokens.spacing.sm) {
                             Image(systemName: "doc.badge.plus")
                                 .font(DesignTokens.typography.title3)
-                            Text("SUBMIT TO TIME THEFT ARCHIVE")
+                            Text("SAVE TO HISTORY")
                                 .font(DesignTokens.typography.headline)
                                 .tracking(0.3)
                                 .textCase(.uppercase)

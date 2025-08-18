@@ -67,7 +67,7 @@ struct StatsHeaderView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityLabel("Performance metrics section")
                 
-                Text("Time Theft Division - Bathroom Operations Department")
+                Text("Break Analytics - Personal Productivity Tracking")
                     .corporateCaptionStyle()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .italic()
@@ -76,7 +76,7 @@ struct StatsHeaderView: View {
             
             HStack(spacing: DesignTokens.spacing.sm) {
                 StatCard(
-                    title: "Revenue Theft",
+                    title: "Break Earnings",
                     value: sessionManager.formattedTotalEarnings,
                     icon: "banknote.fill",
                     color: AppColors.rebellion
@@ -205,7 +205,7 @@ struct EmptyDiaryView: View {
             }
             
             VStack(spacing: DesignTokens.spacing.sm) {
-                Text("NO TIME THEFT OPERATIONS")
+                Text("NO BREAK SESSIONS")
                     .rebellionHeaderStyle()
                     .multilineTextAlignment(.center)
                 
@@ -215,7 +215,7 @@ struct EmptyDiaryView: View {
                     .multilineTextAlignment(.center)
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("No time theft operations detected")
+            .accessibilityLabel("No break sessions recorded")
             
             VStack(spacing: DesignTokens.spacing.sm) {
                 Text("Initiate your first corporate rebellion!")

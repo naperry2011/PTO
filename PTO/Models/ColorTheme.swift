@@ -78,7 +78,7 @@ struct AppColors {
     /// Corporate authority purple (C-suite only)
     static let corporate = Color("CorporateColor", fallback: Color(red: 0.4, green: 0.2, blue: 0.8))
     
-    /// Rebellion gold (time theft achievements)
+    /// Achievement gold (milestone rewards)
     static let rebellion = Color("RebellionColor", fallback: Color(red: 0.9, green: 0.7, blue: 0.1))
     
     // MARK: - Corporate Interaction Colors
@@ -86,7 +86,7 @@ struct AppColors {
     /// Interactive corporate blue (clicking costs company money)
     static let interactive = Color("InteractiveColor", fallback: Color(red: 0.1, green: 0.4, blue: 0.8))
     
-    /// Pressed state (actively stealing time)
+    /// Pressed state (session active)
     static let interactivePressed = Color("InteractivePressedColor", fallback: Color(red: 0.1, green: 0.4, blue: 0.8).opacity(0.7))
     
     // MARK: - Border and Separator Colors
@@ -125,13 +125,13 @@ struct AppColors {
         Color("GradientDanger2", fallback: Color(red: 0.9, green: 0.2, blue: 0.2))
     ]
     
-    /// Rebellion gradient (gold to green - successful time theft)
+    /// Success gradient (gold to green - completed session)
     static let gradientRebellion = [
         Color("GradientRebellion1", fallback: Color(red: 0.9, green: 0.7, blue: 0.1)),
         Color("GradientRebellion2", fallback: Color(red: 0.0, green: 0.6, blue: 0.0))
     ]
     
-    // MARK: - Time Theft Timer Colors
+    // MARK: - Timer Colors
     
     /// Corporate gray clock background (time is money)
     static let timerBackground = Color("TimerBackground", fallback: Color(.systemGray5))
@@ -143,7 +143,7 @@ struct AppColors {
         Color("TimerProgress3", fallback: Color(red: 0.1, green: 0.7, blue: 0.1))
     ]
     
-    /// Inactive timer (not stealing time)
+    /// Inactive timer (session not started)
     static let timerInactive = Color("TimerInactive", fallback: Color(.systemGray4))
     
     // MARK: - Card Shadow Colors
