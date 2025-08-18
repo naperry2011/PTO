@@ -47,7 +47,7 @@ struct ContentView: View {
         .environmentObject(sessionManager)
         .tint(AppColors.corporate)
         .preferredColorScheme(settings.appearanceMode.colorScheme)
-        .onChange(of: selectedTab) { newValue in
+        .onChange(of: selectedTab) { _, newValue in
             // Haptic feedback on tab change
             if settings.enableHaptics {
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()

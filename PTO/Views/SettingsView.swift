@@ -46,7 +46,7 @@ struct SettingsView: View {
                             .onAppear {
                                 tempWage = String(format: "%.2f", settings.hourlyWage)
                             }
-                            .onChange(of: tempWage) { newValue in
+                            .onChange(of: tempWage) { _, newValue in
                                 if let wage = Double(newValue), wage > 0 {
                                     settings.hourlyWage = wage
                                 }
